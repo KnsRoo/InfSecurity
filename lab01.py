@@ -11,7 +11,6 @@ for i in range(len(crypt)):
 print("".join(crypt))
 
 #-----------------------Дешифрование-----------------------
-
 def stroka(tmp, ret = True):
     for j in range(len(filter)):
         if tmp.count(filter[j]) != 0:
