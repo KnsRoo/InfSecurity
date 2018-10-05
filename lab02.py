@@ -16,7 +16,7 @@ def groupby(iterable, target):
 		if len(iterable) % 2 != 0:
 			iterable+='Ю'
 		reparr = [[' ','Й','Ь','Ё'],
-				  ['', 'И','Ъ','Е']]
+		 	 ['', 'И','Ъ','Е']]
 		for i in range(len(reparr[0])):
 			iterable = iterable.replace(reparr[0][i], reparr[1][i])
 	args = [iter(iterable)] * 2
@@ -29,20 +29,18 @@ def crypting(target,crypt):
 		z,f = 1,1
 	else:
 		return 'target is invalid'
-	alp1 = keyword + alp
-	alp1 = list(OrderedDict(zip(alp1, repeat(None))))
-	alp1 = np.reshape(alp1,(5,6))
+	table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))),(5,6))
 	crypt = [''.join(i) for i in groupby(crypt,target)]
 	phrase = ''
 	for item in crypt:
-		y1,x1 = np.where(alp1 == item[0])
-		y2,x2 = np.where(alp1 == item[1])
+		y1,x1 = np.where(table == item[0])
+		y2,x2 = np.where(table == item[1])
 		if x1 == x2:
-			phrase+=alp1[y1[0]-z][x1[0]]+alp1[y2[0]-z][x2[0]]
+			phrase+=table[y1[0]-z][x1[0]]+table[y2[0]-z][x2[0]]
 		elif y1 == y2:
-			phrase+=alp1[y1[0]][x1[0]-f]+alp1[y2[0]][x2[0]-f]
+			phrase+=table[y1[0]][x1[0]-f]+table[y2[0]][x2[0]-f]
 		else:
-			phrase+=alp1[y1[0]][x2[0]]+alp1[y2[0]][x1[0]]
+			phrase+=table[y1[0]][x2[0]]+table[y2[0]][x1[0]]
 	return phrase
 
 print(crypting("encode", crypt))
