@@ -22,7 +22,7 @@ def groupby(iterable, target):
 	args = [iter(iterable)] * 2
 	return zip(*args)
 
-def crypting(target,crypt):
+def crypting(target,crypt,phrase = ''):
 	if target == 'encode':
 		z,f = 4,5
 	elif target == 'decode':
@@ -31,7 +31,6 @@ def crypting(target,crypt):
 		return 'target is invalid'
 	table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))),(5,6))
 	crypt = [''.join(i) for i in groupby(crypt,target)]
-	phrase = ''
 	for item in crypt:
 		y1,x1 = np.where(table == item[0])
 		y2,x2 = np.where(table == item[1])
