@@ -23,12 +23,11 @@ def encrypt(crypt, key):
 
 def decrypt(phrase, key, ret = ''):
 	phrase = np.array(list(phrase))
-	phrase = phrase.reshape(len(key),int(len(phrase)/len(key))).T
 	if key.isdigit():
 		key = list(map(int,key))
 		for i in range(len(key)):
 			key[i]-=1
-		return crypting(1,phrase,key)
+		return crypting(1,phrase.reshape(len(key),int(len(phrase)/len(key))).T,key)
 	else:
 		key, num_arr, pos_arr = list(key), [i for i in range(len(key))], []
 		for i in range(len(key)):
@@ -43,7 +42,7 @@ def decrypt(phrase, key, ret = ''):
 		for item in mut:
 			for i in range(len(item)):
 				key[pos_arr[i]] = item[i]
-			ret+=crypting(1,phrase, key)+'\n'
+			ret+=crypting(1,phrase.reshape(len(key),int(len(phrase)/len(key))).T, key)+'\n'
 		return ret
 
 phrase = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ'
