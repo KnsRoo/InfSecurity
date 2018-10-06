@@ -1,7 +1,6 @@
 import numpy as np
 import itertools
 
-
 def ct1(phrase, key, ret = ''):
 	tmp = np.array(phrase)
 	for item in key:
