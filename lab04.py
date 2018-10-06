@@ -1,21 +1,17 @@
 import numpy as np
 import itertools
 
-def ct1(phrase, key, ret = ''):
+def crypting(tgt, phrase, key, ret = ''):
 	tmp = np.array(phrase)
 	for item in key:
 		ret+=str(item+1)
-	for i in range(len(key)):
-	    tmp[::,int(i)] = phrase[::,int(key[i])]
-	return ret+' '+''.join(tmp.ravel())
-
-def ct2(phrase, key, ret = ''):
-	for item in key:
-		ret+=str(item+1)
-	tmp = np.array(phrase)
-	for i in range(len(key)):
-	    tmp[::,int(key[i])] = phrase[::,int(i)]
-	tmp = tmp.T
+	if (tgt):
+		for i in range(len(key)):
+		    tmp[::,int(i)] = phrase[::,int(key[i])]
+	else:
+		for i in range(len(key)):
+			tmp[::,int(key[i])] = phrase[::,int(i)]
+		tmp = tmp.T
 	return ret+' '+''.join(tmp.ravel())
 
 def encrypt(crypt, key):
@@ -23,7 +19,7 @@ def encrypt(crypt, key):
 	for i in range(len(key)):
 		key[i] = int(key[i])-1
 	crypt = np.array(list(crypt.replace(' ','')))
-	return ct2(crypt.reshape(int(len(crypt)/len(key)),len(key)), key)
+	return crypting(0,crypt.reshape(int(len(crypt)/len(key)),len(key)), key)
 
 def decrypt(phrase, key, ret = ''):
 	phrase = np.array(list(phrase))
@@ -32,7 +28,7 @@ def decrypt(phrase, key, ret = ''):
 		key = list(map(int,key))
 		for i in range(len(key)):
 			key[i]-=1
-		return ct1(phrase,key)
+		return crypting(1,phrase,key)
 	else:
 		key, num_arr, pos_arr = list(key), [i for i in range(len(key))], []
 		for i in range(len(key)):
@@ -47,7 +43,7 @@ def decrypt(phrase, key, ret = ''):
 		for item in mut:
 			for i in range(len(item)):
 				key[pos_arr[i]] = item[i]
-			ret+=ct1(phrase, key)+'\n'
+			ret+=crypting(1,phrase, key)+'\n'
 		return ret
 
 phrase = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ'
