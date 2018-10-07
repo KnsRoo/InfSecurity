@@ -27,8 +27,7 @@ def decrypt(phrase, key, ret = ''):
 			if key[i].isdigit():
 				key[i] = int(key[i])-1
 				del num_arr[num_arr.index(key[i])]
-		for i in range(len(key)):
-			if key[i] == 'X':
+			else:
 				key[i] = num_arr.pop(0)
 				num_arr.append(key[i]), pos_arr.append(i)
 		for item in list(itertools.permutations(num_arr)):
