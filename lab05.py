@@ -12,7 +12,7 @@ def readline(table, tmp, crypt, tgt):
 
 def crypting(target, table, tmp):
 	if target == 'encode':
-		tmp, crypt, tgt = [list(map(str,table[i])) for i in range(len(table))], list(tmp), 1
+		tmp, crypt, tgt = [list(map(str,table[i])) for i in range(len(table))], list(tmp.replace(' ','')), 1
 	elif target == 'decode':
 		tmp, crypt, tgt = np.array(list(tmp)).reshape(6,10), '', 0
 	tmp, crypt = readline(table, tmp, crypt, tgt)
@@ -25,9 +25,7 @@ def crypting(target, table, tmp):
 	return ''.join((np.array(tmp)).ravel()) if target == 'encode' else crypt
 
 if __name__ == "__main__":
-	crypt = 'ШИФРРЕШЕТКАЯВЛЯЕТСЯЧАСТНЫМСЛУЧАЕМШИФРАМАРШРУТНОЙПЕРЕСТАНОВКИ'
+	crypt = 'ШИФР РЕШЕТКА ЯВЛЯЕТСЯ ЧАСТНЫМ СЛУЧАЕМ ШИФРА МАРШРУТНОЙ ПЕРЕСТАНОВКИ'
 	table = np.array([[0,1,0,0,0,0,0,0,0,0],[1,0,0,0,1,0,1,1,0,0],[0,1,0,0,0,1,0,0,0,1],[0,0,0,1,0,0,0,1,0,0],[0,1,0,0,0,0,0,0,0,0],[0,0,1,0,0,1,1,0,0,1]])
 	phrase = crypting('encode', table, crypt)
-	print(phrase)
-	crypt = crypting('decode',table, phrase)
-	print(crypt)
+	print(phrase+'\n'+crypting('decode',table, phrase))
