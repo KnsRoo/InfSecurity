@@ -1,6 +1,6 @@
 import itertools, numpy as np
 
-def crypting(tgt, phrase, key):
+def crypting(phrase, key, tgt):
 	tmp, ret = np.array(phrase), ''.join([str(item+1) for item in key ])
 	for i in range(len(key)):
 		m,k = int(i) if tgt else int(key[i]), int(key[i]) if tgt else int(i)
@@ -9,13 +9,13 @@ def crypting(tgt, phrase, key):
 
 def encrypt(crypt, key):
 	key, crypt = list(map(lambda x: int(x)-1,key)), np.array(list(crypt.replace(' ','')))
-	return crypting(0,crypt.reshape(int(len(crypt)/len(key)),len(key)), key)
+	return crypting(crypt.reshape(int(len(crypt)/len(key)),len(key)), key,0)
 
 def decrypt(phrase, key, ret = ''):
 	phrase = np.array(list(phrase))
 	if key.isdigit():
 		key = list(map(lambda x: int(x)-1,key))
-		return crypting(1,phrase.reshape(len(key),int(len(phrase)/len(key))).T,key)
+		return crypting(phrase.reshape(len(key),int(len(phrase)/len(key))).T,key,1)
 	else:
 		key, num_arr, pos_arr = list(key), [i for i in range(len(key))], []
 		for i in range(len(key)):
@@ -28,7 +28,7 @@ def decrypt(phrase, key, ret = ''):
 		for item in list(itertools.permutations(num_arr)):
 			for i in range(len(item)):
 				key[pos_arr[i]] = item[i]
-			ret+=crypting(1,phrase.reshape(len(key),int(len(phrase)/len(key))).T, key)+'\n'
+			ret+=crypting(phrase.reshape(len(key),int(len(phrase)/len(key))).T, key,1)+'\n'
 		return ret
 
 if __name__ == "__main__":
