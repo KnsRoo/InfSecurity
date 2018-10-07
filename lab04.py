@@ -2,8 +2,7 @@ import numpy as np
 import itertools
 
 def crypting(tgt, phrase, key):
-	tmp = np.array(phrase)
-	ret = ''.join([str(item+1) for item in key ])
+	tmp, ret = np.array(phrase), ''.join([str(item+1) for item in key ])
 	if (tgt):
 		for i in range(len(key)):
 			tmp[::,int(i)] = phrase[::,int(key[i])]
@@ -14,8 +13,7 @@ def crypting(tgt, phrase, key):
 	return ret+' '+''.join(tmp.ravel())
 
 def encrypt(crypt, key):
-	key = list(map(lambda x: int(x)-1,key))
-	crypt = np.array(list(crypt.replace(' ','')))
+	key, crypt = list(map(lambda x: int(x)-1,key)), np.array(list(crypt.replace(' ','')))
 	return crypting(0,crypt.reshape(int(len(crypt)/len(key)),len(key)), key)
 
 def decrypt(phrase, key, ret = ''):
