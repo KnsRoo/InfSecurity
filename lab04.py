@@ -39,11 +39,9 @@ def decrypt(phrase, key, ret = ''):
 			ret+=crypting(1,phrase.reshape(len(key),int(len(phrase)/len(key))).T, key)+'\n'
 		return ret
 
-phrase = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ'
-crypt = 'ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
-
-print(encrypt(crypt,'7563124'))
-print('-'*50)
-print(decrypt(phrase, '7563124'))
-print('-'*50)
-print(decrypt(phrase, '7XX3X24'))
+if __name__ == "__main__":
+	phrase, crypt = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ','ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
+	try:
+		print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7XX3X24'))
+	except ValueError:
+		print('Size of phrase or key is invalid')
