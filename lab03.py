@@ -1,31 +1,30 @@
 import numpy as np
 import math
 
-alp = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ"
-crypt = 'МЫ ОТКРЫВАЕМ СЕБЯ'
-key = 'ПАРОЛЬ'
-
-table = np.array([list("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ")])
-for i in range(len(table[0])-1):
-    tmp = np.roll(table[len(table)-1],-1,axis=0)
-    table = np.vstack((table,tmp))
-
-def encrypt(crypt, phrase = ''):
-    global key
-    crypt = crypt.replace(' ','')
+def createtable(key):
+    table = np.array([list("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ")])
+    for i in range(len(table[0])-1):
+        tmp = np.roll(table[len(table)-1],-1,axis=0)
+        table = np.vstack((table,tmp))
     key = str(key*math.ceil((len(crypt))/len(key)))[:len(crypt)]
+    return table, key
+
+def encrypt(alp, table, key, crypt, phrase = ''):
+    crypt = crypt.replace(' ','')
     for i in range(len(crypt)):
         m,n = alp.index(key[i]), alp.index(crypt[i])
         phrase+=table[m][n]
     return phrase
 
-def decrypt(crypt, phrase = ''):
+def decrypt(alp, table, key, crypt, phrase = ''):
     for i in range(len(crypt)):
         m = alp.index(key[i])
         x = np.where(table[m] == crypt[i])
         phrase+=alp[x[0][0]]
     return phrase
 
-phrase = encrypt(crypt)
-print(phrase)
-print(decrypt(phrase))
+if __name__ == "__main__":
+    alp, crypt, key = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ", 'МЫ ОТКРЫВАЕМ СЕБЯ', 'ПАРОЛЬ'
+    table, key = createtable(key)
+    phrase = encrypt(alp, table, key, crypt)
+    print(phrase+'\n'+decrypt(alp, table, key, phrase))
