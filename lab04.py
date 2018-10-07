@@ -1,5 +1,4 @@
-import numpy as np
-import itertools
+import itertools, numpy as np
 
 def crypting(tgt, phrase, key):
 	tmp, ret = np.array(phrase), ''.join([str(item+1) for item in key ])
