@@ -13,9 +13,8 @@ def groupby(iterable, target):
             if iterable[i] == iterable[i+1]:
                 iterable = iterable[:i+1]+'Ю'+iterable[i+1:]
         iterable+='Ю' if len(iterable) % 2 != 0 else ''
-        reparr = [[' ','Й','Ь','Ё'], ['', 'И','Ъ','Е']]
-        for i in range(len(reparr[0])):
-            iterable = iterable.replace(reparr[0][i], reparr[1][i])
+        reparr = ''.maketrans('ЙЬЁ','ИЪЕ')
+        iterable = iterable.translate(reparr).replace(' ', '')
     return zip(*([iter(iterable)] * 2))
 
 def crypting(target,crypt,phrase = ''):
