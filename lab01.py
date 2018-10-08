@@ -1,16 +1,16 @@
 def encrypt(alp, crypt, k):
     return str(k)+' '+''.join([alp[(alp.index(crypt[i])+k) % 32] for i in range(len(crypt))])
 
-def stroka(tmp, ret = True):
+def stroka(tmp, filter, ret = True):
     for j in range(len(filter)):
         if tmp.count(filter[j]) != 0:
             ret = False  
     return ret
     
 def decrypt(alp, phrase, filter, ret = ''):
-    for k in range(1,31):
-        phrase = [alp[(alp.index(phrase[i])-k+2) % 32] for i in range(len(phrase))]
-        ret += str(k+2)+' '+''.join(phrase)+'\n' if stroka(''.join(phrase)) else ''
+    for k in range(1,32):
+        tmp = [alp[(alp.index(phrase[i])-k % 32)] for i in range(len(phrase))]
+        ret += str(k)+' '+''.join(tmp)+'\n' if stroka(''.join(tmp), filter) else ''
     return ret
 
 if __name__ == '__main__':
