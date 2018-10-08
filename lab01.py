@@ -1,12 +1,10 @@
 def exists(tmp, filter, ret = True):
     for i, item in enumerate(filter):
-        if tmp.count(item) != 0:
-           ret = False  
+        if tmp.count(item) != 0: ret = False  
     return ret
 
 def crypting(target, alp, crypt, k_and_f, ret = ''):
-    if target == 'encode':
-        return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
+    if target == 'encode': return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
     else:
         for k in range(1,32):
             tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
