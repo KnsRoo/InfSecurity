@@ -2,11 +2,6 @@ from collections import OrderedDict
 from itertools import repeat
 import numpy as np
 
-alp = list("АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЭЮЯ")
-keyword = list("ТОВАРИЩ")
-crypt = "КОД ПЛЕЙФЕЙЕРА ОСНОВАН НА ИСПОЛЬЗОВАНИИ МАТРИЦЫ БУКВ"
-phrase = list("МОЩЕЯВЧЪЛТАПЯВМОМРЗФИЫПТБКВИХБЦБЩШЪЧШЩИВТЧОАДХОПАБТИВАРМЖИ")
-
 def groupby(iterable, target):
     if target == 'encode':
         for i in range(0,len(iterable)-1,2):
@@ -17,10 +12,8 @@ def groupby(iterable, target):
         iterable = iterable.translate(reparr).replace(' ', '')
     return zip(*([iter(iterable)] * 2))
 
-def crypting(target,crypt,phrase = ''):
-    z,f = 1,1
-    if target == 'encode':
-        z,f = 4,5
+def crypting(target, alp, keyword, crypt, phrase = ''):
+    z,f = 4 if target == 'encode' else 1, 5 if target == 'encode' else 1
     table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))),(5,6))
     crypt = [''.join(i) for i in groupby(crypt,target)]
     for item in crypt:
@@ -34,4 +27,8 @@ def crypting(target,crypt,phrase = ''):
             phrase+=table[y1[0]][x2[0]]+table[y2[0]][x1[0]]
     return phrase
 
-print(crypting("encode", crypt)+'\n'+crypting("decode", phrase))
+if __name__ == '__main__':
+    alp, keyword  = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЭЮЯ", "ТОВАРИЩ"
+    crypt = "КОД ПЛЕЙФЕЙЕРА ОСНОВАН НА ИСПОЛЬЗОВАНИИ МАТРИЦЫ БУКВ"
+    phrase = "МОЩЕЯВЧЪЛТАПЯВМОМРЗФИЫПТБКВИХБЦБЩШЪЧШЩИВТЧОАДХОПАБТИВАРМЖИ" 
+    print(crypting("encode", list(alp), list(keyword), crypt)+'\n'+crypting("decode", list(alp), list(keyword), list(phrase)))
