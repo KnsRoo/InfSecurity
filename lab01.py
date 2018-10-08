@@ -1,22 +1,21 @@
-def encrypt(alp, crypt, k):
-    return str(k)+' '+''.join([alp[(alp.index(crypt[i])+k) % 32] for i in range(len(crypt))])
-
-def stroka(tmp, filter, ret = True):
-    for j in range(len(filter)):
-        if tmp.count(filter[j]) != 0:
-            ret = False  
+def exists(tmp, filter, ret = True):
+    for i, item in enumerate(filter):
+        if tmp.count(item) != 0:
+           ret = False  
     return ret
+
+def crypting(target, alp, crypt, k_and_f, ret = ''):
+    if target == 'encode':
+        return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
+    else:
+        for k in range(1,32):
+            tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
+            ret += str(k)+' '+''.join(tmp)+'\n' if exists(''.join(tmp), k_and_f) else ''
+        return ret
     
-def decrypt(alp, phrase, filter, ret = ''):
-    for k in range(1,32):
-        tmp = [alp[(alp.index(phrase[i])-k % 32)] for i in range(len(phrase))]
-        ret += str(k)+' '+''.join(tmp)+'\n' if stroka(''.join(tmp), filter) else ''
-    return ret
-
 if __name__ == '__main__':
     alp = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ'
     phrase = 'ПМЯПРАГЛЛЩЗПГИОГРЛЩЗИЙЪХМРНОЮАЖРГЙЭКМДГРЯЩРШЖПНМЙШЕМАЮЛВЙЭЦЖТОМАИЖПММЯЧГЛЖЭ'
     crypt = 'СОБСТВЕННЫЙСЕКРЕТНЫЙКЛЮЧОТПРАВИТЕЛЯМОЖЕТБЫТЬИСПОЛЬЗОВАНДЛЯШИФРОВКИСООБЩЕНИЯ'
     filter = ["ГЪ","КЩ","ЩФ","ЩЗ","ЭЩ","ЩК","ГЩ","ЩП","ЩТ","ЩШ","ЩГ","ЩМ","ФЩ","ЩЛ","ЩД","ДЩ","ЧЦ","ВЙ","ЙА","ШЯ","ШЫ","ГЮ","ХЯ","ЙЫ","ЦЯ","ГЬ","СЙ","ХЮ","ЪЖ","ЪД","УЬ","ЩЧ","ЧЙ","ШЙ","ШЗ","ЫФ","ЖЩ","ЖШ","ЖЦ","ЫЪ","ЫЭ","ЫЮ","ЫЬ","ЖЙ","ЫЫ","ЖЪ","ЖЫ","ЪШ","ПЙ","ЪЩ","ЗЩ","ЪЧ","ЪЦ","ЪУ","ЪФ","ЪХ","ЪЪ","ЪЫ","ЫО","ЖЯ","ЗЙ","ЪЬ","ЪЭ","ЫА","НЙ","ЕЬ","ЦЙ","ЬЙ","ЬЛ","ЬР","ПЪ","ЕЫ","ЕЪ","ЬА","ШЪ","ЪТ","ЩС","ОЬ","КЪ","ОЫ","ЩХ","ЩЩ","ЩЪ","ЩЦ","КЙ","ОЪ","ЦЩ","ЛЪ","МЙ","ШЩ","ЦЬ","ЦЪ","ЩЙ","ЙЬ","ЪГ","ИЪ","ЪБ","ЪВ","ЪИ","ЪЙ","ЪП","ЪР","ЪС","ЪО","ЪН","ЪК","ЪЛ","ЪМ","ИЫ","ИЬ","ЙУ","ЩЭ","ЙЫ","ЙЪ","ЩЫ","ЩЮ","ЩЯ","ЪА","МЪ","ЙЙ","ЙЖ","ЬУ","ГЙ","ЭЪ","УЪ","АЬ","ЧЪ","ХЙ","ТЙ","ЧЩ","РЪ","ЮЪ","ФЪ","УЫ","АЪ","ЮЬ","АЫ","ЮЫ","ЭЬ","ЭЫ","БЙ","ЯЬ","ЬЫ","ЬЬ","ЬЪ","ЯЪ","ЯЫ","ХЩ","ДЙ","ФЙ"]
-    print(encrypt(list(alp), list(crypt), 30))
-    print(decrypt(list(alp),list(phrase),filter))
+    print(crypting('encode',list(alp), list(crypt), 30)+'\n'+crypting('decode',list(alp),list(phrase),filter))
