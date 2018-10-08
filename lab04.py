@@ -12,7 +12,6 @@ def encrypt(crypt, key):
 	return crypting(crypt.reshape(int(len(crypt)/len(key)),len(key)), key,0)
 
 def decrypt(phrase, key, ret = ''):
-	phrase = np.array(list(phrase))
 	if key.isdigit(): 
 		key = list(map(lambda x: int(x)-1,key))
 		return crypting(phrase.reshape(len(key),int(len(phrase)/len(key))).T,key,1)
@@ -30,5 +29,5 @@ def decrypt(phrase, key, ret = ''):
 
 if __name__ == "__main__":
 	phrase, crypt = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ','ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
-	try: print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7XX3X24'))
+	try: print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)), '7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)), '7XX3X24'))
 	except ValueError: print('Size of phrase or key is invalid')
