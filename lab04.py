@@ -24,14 +24,11 @@ def decrypt(phrase, key, ret = ''):
 				key[i] = num_arr.pop(0)
 				num_arr.append(key[i]), pos_arr.append(i)
 		for item in list(itertools.permutations(num_arr)):
-			for i, num in enumerate(item):
-				key[pos_arr[i]] = num
+			for i, num in enumerate(item): key[pos_arr[i]] = num
 			ret+=crypting(phrase.reshape(len(key),int(len(phrase)/len(key))).T, list(map(int,key)),1)+'\n'
 		return ret
 
 if __name__ == "__main__":
 	phrase, crypt = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ','ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
-	try:
-		print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7XX3X24'))
-	except ValueError:
-		print('Size of phrase or key is invalid')
+	try: print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7563124')+'\n'+'-'*50+'\n'+decrypt(phrase, '7XX3X24'))
+	except ValueError: print('Size of phrase or key is invalid')
