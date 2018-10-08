@@ -19,12 +19,9 @@ def crypting(target, alp, keyword, crypt, phrase = ''):
     for item in crypt:
         y1,x1 = np.where(table == item[0])
         y2,x2 = np.where(table == item[1])
-        if x1 == x2:
-            phrase+=table[y1[0]-z][x1[0]]+table[y2[0]-z][x2[0]]
-        elif y1 == y2:
-            phrase+=table[y1[0]][x1[0]-f]+table[y2[0]][x2[0]-f]
-        else:
-            phrase+=table[y1[0]][x2[0]]+table[y2[0]][x1[0]]
+        if x1 == x2: phrase+=table[y1[0]-z][x1[0]]+table[y2[0]-z][x2[0]]
+        elif y1 == y2: phrase+=table[y1[0]][x1[0]-f]+table[y2[0]][x2[0]-f]
+        else: phrase+=table[y1[0]][x2[0]]+table[y2[0]][x1[0]]
     return phrase
 
 if __name__ == '__main__':
