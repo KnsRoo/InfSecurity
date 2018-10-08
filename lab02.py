@@ -5,8 +5,7 @@ import numpy as np
 def groupby(iterable, target):
     if target == 'encode':
         for i in range(0,len(iterable)-1,2):
-            if iterable[i] == iterable[i+1]:
-                iterable = iterable[:i+1]+'Ю'+iterable[i+1:]
+            if iterable[i] == iterable[i+1]: iterable = iterable[:i+1]+'Ю'+iterable[i+1:]
         iterable+='Ю' if len(iterable) % 2 != 0 else ''
         reparr = ''.maketrans('ЙЬЁ','ИЪЕ')
         iterable = iterable.translate(reparr).replace(' ', '')
