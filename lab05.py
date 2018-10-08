@@ -1,14 +1,13 @@
 import numpy as np
 
 def readline(table, tmp, crypt, tgt):
-	for i in range(len(table)):
-		for j in range(len(table[0])):
-			if table[i][j] == 1:
-				if tgt:
-					tmp[i][j] = crypt.pop(0)
-				else:
-					crypt+=tmp[i][j]
-	return tmp, crypt
+	for index, item in np.ndenumerate(table):
+		if item == 1:
+			if tgt:
+				tmp[index[0]][index[1]] = crypt.pop(0)
+			else:
+				crypt+=tmp[index[0]][index[1]]
+	return tmp, crypt		
 
 def crypting(target, table, tmp):
 	if target == 'encode':
