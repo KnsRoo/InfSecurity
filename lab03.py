@@ -1,5 +1,4 @@
-import numpy as np
-import math
+import math, numpy as np
 
 def createtable(key):
     table = np.array([list("АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ")])
