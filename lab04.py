@@ -17,8 +17,7 @@ def decrypt(phrase, key, ret = ''):
 		key = list(map(lambda x: int(x)-1,key))
 		return crypting(phrase.reshape(len(key),int(len(phrase)/len(key))).T,key,1)
 	else:
-		key, num_arr, pos_arr = list(key), [i for i in range(len(key))], []
-		key = list(map(lambda x: str(int(x)-1) if x.isdigit() else x,key))
+		key, num_arr, pos_arr = list(map(lambda x: str(int(x)-1) if x.isdigit() else x,key)), [i for i in range(len(key))], []
 		for i, item in enumerate(key):
 			if item.isdigit(): del num_arr[num_arr.index(int(key[i]))]
 			else:
