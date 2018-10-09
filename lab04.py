@@ -27,6 +27,9 @@ def decrypt(phrase, key, ret = ''):
 		return ret
 
 if __name__ == "__main__":
-	phrase, crypt = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ','ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
-	try: print(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)), '7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)), '7XX3X24'))
-	except ValueError: print('Size of phrase or key is invalid')
+  phrase, crypt = 'ЛЩЕОЬИЙМААТЛНТОАОЯСВКЗЕЗЛААТ','ЛОКАЛЬНАЯ ЗАЩИТА СЕТЕЙ ОТ ВЗЛОМА'
+  try:
+    with open('output.txt', 'w') as f:
+      f.write(encrypt(crypt,'7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)),'7563124')+'\n'+'-'*50+'\n'+decrypt(np.array(list(phrase)), 'XXXXXXX'))
+  except ValueError: print('Size of phrase or key is invalid')
+  finally: print('Success')
