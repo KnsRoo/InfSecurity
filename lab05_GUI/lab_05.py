@@ -53,7 +53,9 @@ def genmatrix(M, grid, pg, nul = False):
             x,y = np.where(grid == rand)
             grid[x[0]][y[0]] = 0
             R,S,U = grid[x[0]][M[1]-y[0]-1], grid[M[0]-x[0]-1][y[0]], grid[M[0]-x[0]-1][M[1]-y[0]-1]
-            array.remove(R), array.remove(S), array.remove(U)
+            if R in array: array.remove(R) 
+            if S in array: array.remove(S)
+            if U in array: array.remove(U)
     pg.setValue(100)
     return grid
 
@@ -79,8 +81,10 @@ class Window(QMainWindow):
     def on_oldtext_textChanged(self):
         self.radioButton.setChecked(True)
         self.generate.setEnabled(False)
+        self.loadto.setEnabled(True)
         self.hand_mode.setEnabled(False)
         self.loadfrom.setEnabled(False)
+        self.loadto.setEnabled(False)
         self.comboBox.clear()
         self.start.setEnabled(True)
         self.start.setText('Анализ')
@@ -135,9 +139,10 @@ class Window(QMainWindow):
         f = QFileDialog.getOpenFileName(self, 'Open file', os.getcwd(),"Key files (*.mrgkey)")
         if f[0] != '':
             with open(f[0],'r') as file:
-                files = list(file.read())
-                x = files.pop(0)
-                y = files.pop(0)
+                files = file.read().split('x')
+                print(files)
+                x,y = files[0], files[1]
+                files = list(files[2])
                 self.M = (int(x),int(y))
                 self.comboBox.clear()
                 self.comboBox.addItem(y+'x'+x)
@@ -160,7 +165,7 @@ class Window(QMainWindow):
         f = QFileDialog.getSaveFileName(self, 'Save file', os.getcwd(),"Key files (*.mrgkey)")
         if f[0]!='':
             with open(f[0],'w') as file:
-                file.write(str(self.M[0])+str(self.M[1]))
+                file.write(str(self.M[0])+'x'+str(self.M[1])+'x')
                 for index,item in np.ndenumerate(self.grid):
                     if item != 0: item = 1
                     file.write(str(item))
@@ -182,7 +187,7 @@ class Window(QMainWindow):
         for index, item in np.ndenumerate(self.grid):
             if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
             self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
-        self.generate.setEnabled(True)
+        self.loadto.setEnabled(True)
         self.progressBar.setValue(100)
 
 
@@ -226,7 +231,9 @@ class Window(QMainWindow):
             if item.objectName == str(S[0])+'_'+str(S[1]): item.setEnabled(False)
             if item.objectName == str(U[0])+'_'+str(U[1]): item.setEnabled(False)
             if item.isEnabled() == True: all_disabled = False
-        if all_disabled: self.start.setEnabled(True)
+        if all_disabled: 
+            self.start.setEnabled(True)
+            self.loadto.setEnabled(True)
 
     def clear_layout(self):
         lines = self.frame.findChildren(QtWidgets.QPushButton)
