@@ -111,7 +111,7 @@ class Window(QMainWindow):
 
     @pyqtSlot()
     def on_clear_set_clicked(self):
-        self.grid, seld.M = [], (0,0)
+        self.grid, self.M = [], (0,0)
         self.comboBox.clear()
         self.comboBox.setEnabled(True)
         self.clear_layout()
@@ -140,23 +140,23 @@ class Window(QMainWindow):
         if f[0] != '':
             with open(f[0],'r') as file:
                 files = file.read().split('x')
-                print(files)
                 x,y = files[0], files[1]
                 files = list(files[2])
                 self.M = (int(x),int(y))
                 self.comboBox.clear()
                 self.comboBox.addItem(y+'x'+x)
                 self.comboBox.setEnabled(False)
-                self.grid = genmatrix(self.M,self.grid, self.progressBar)
+                self.grid = np.zeros(self.M)
                 self.createtable()
                 for index, item in np.ndenumerate(self.grid):
                     self.grid[index[0]][index[1]] = files.pop(0)
             file.close()
             lines = self.frame.findChildren(QtWidgets.QPushButton)
-            for index, item in np.ndenumerate(self.grid):
-                self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
-                if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
-                self.progressBar.setValue(100)
+            if int(x)*int(y)<3601:
+                for index, item in np.ndenumerate(self.grid):
+                    self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
+                    if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
+                    self.progressBar.setValue(100)
             if len(self.phrase) == int(x)*int(y): self.start.setEnabled(True)
             else: self.start.setEnabled(False)
 
@@ -178,15 +178,16 @@ class Window(QMainWindow):
         self.M = (param[1], param[0])
         self.start.setEnabled(True)
         self.grid = genmatrix(self.M, self.grid, self.progressBar)
-        self.createtable()
-        lines = self.frame.findChildren(QtWidgets.QPushButton)
-        for index, item in enumerate(lines):
-            self.progressBar.setValue(index/len(lines)*100)
-            item.setStyleSheet("background-color: rgb(205, 1, 1);" "border: none;")
-        self.progressBar.setValue(0)
-        for index, item in np.ndenumerate(self.grid):
-            if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
-            self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
+        if param[1]*param[0]<3601:
+            self.createtable()
+            lines = self.frame.findChildren(QtWidgets.QPushButton)
+            for index, item in enumerate(lines):
+                self.progressBar.setValue(index/len(lines)*100)
+                item.setStyleSheet("background-color: rgb(205, 1, 1);" "border: none;")
+            self.progressBar.setValue(0)
+            for index, item in np.ndenumerate(self.grid):
+                if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
+                self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
         self.loadto.setEnabled(True)
         self.progressBar.setValue(100)
 
@@ -203,7 +204,7 @@ class Window(QMainWindow):
             if self.radioButton.isChecked() == True:
                 if a:
                     self.generate.setEnabled(True)
-                    self.hand_mode.setEnabled(True)
+                    if len(self.phrase)<3601: self.hand_mode.setEnabled(True)
                     self.loadfrom.setEnabled(True)
                     self.start.setText('Преобразовать')
             else:
