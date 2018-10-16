@@ -18,7 +18,6 @@ client = None
 while True:
 	comm = sock.recv(1024)
 	comm = comm.decode('utf-8')
-	print(comm)
 	if comm == 'gp':
 		gp = sock.recv(1024)
 		gp = gp.decode('utf-8')

@@ -7,7 +7,7 @@ def randomprime():
 def givesecret(peer, secret, final = False):
 	if final: peer.send('givesf'.encode('utf-8'))
 	else: peer.send('gives'.encode('utf-8'))
-	time.sleep(1)   # Кастыль
+	time.sleep(0.05)   # Кастыль
 	peer.send(str(secret).encode('utf-8'))
 	
 def getsecret(peer):
@@ -35,16 +35,13 @@ def start(conn, addr):
 			givesecret(PEERS[(i+1)%len(PEERS)], a, final = True)
 		else:
 			a = getmod(PEERS[(i)%len(PEERS)])
-			print(a)
 			givesecret(PEERS[(i+1)%len(PEERS)], a)
 			j = i+2
 			for x in range(len(PEERS)-3):
 				a = getsecret(PEERS[(j-1)%len(PEERS)])
-				print(a)
 				givesecret(PEERS[j%len(PEERS)], a)
 				j+=1
 			a = getsecret(PEERS[(i+len(PEERS)-2)%len(PEERS)])
-			print(a)
 			givesecret(PEERS[(i+len(PEERS)-1)%len(PEERS)], a, final = True)
 
 sock = socket.socket()
