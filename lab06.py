@@ -1,23 +1,8 @@
 import random, math
 
-def isPrime(n):
-	return 2 in [n,2**n%n] 
-
 def randomprime():
-	prime = random.randint(1,30000)
-	return prime if isPrime(prime) else randomprime()
-
-def gcd(a,b):
-    while a != b:
-        if a > b: a = a - b
-        else: b = b - a
-    return a
-
-def p_root(mod):
-	rset = set(num for num in range (1, mod) if gcd(num, mod) == 1)
-	for g in range(1, mod):
-		aset = set(pow(g, powers) % mod for powers in range (1, mod))
-		if rset == aset: return g
+	prime = random.randint(32,300)
+	return ((2**prime)-1, random.randint(3,10)) if 2 in [prime,2**prime%prime] else randomprime()
 
 class Peer():
 	def __init__(self,g,p):
@@ -29,11 +14,9 @@ class Peer():
 		self.secret = (R**self.k)%p
 		if key: self.key = self.secret
 			
-COUNT = 5 
-p = randomprime()
-g = p_root(p)
+COUNT = 8
+p,g = randomprime()
 PEERS = [Peer(g,p) for i in range(COUNT)]
-
 names = ['Alisa', 'Bob', 'Carol', 'Melory', 'Ilya','Lera','Inna','Vasya']
 
 for i in range(len(PEERS)):
