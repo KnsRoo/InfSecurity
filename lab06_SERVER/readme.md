@@ -1,7 +1,9 @@
 # Running
 
-##Run server.py from cmd
+## Run server.py from cmd
 
-##Run a needed count of copies client.py
+### Insert a count of clients
 
-#Enjoy!
+## Run a needed count of copies client.py
+
+# Enjoy!
