@@ -3,37 +3,37 @@ import socket, random
 class Peer():
 	def __init__(self,g,p):
 		self.g, self.p = g, p
-		self.k = random.randint(10,99)
+		self.k = random.randint(100,1000)
 		self.mod = (self.g**self.k)%self.p
 
 	def getsecret(self, R, key = False):
-		self.secret = (R**self.k)%p
+		self.secret = (R**self.k)%self.p
 		if key: self.key = self.secret
 
+def reply(comm):
+	global client
+	switch = comm.pop(0)
+	if switch != '':
+		if switch == 'gtgp':
+			g = int(comm.pop(0))
+			p = int(comm.pop(0))
+			client = Peer(g,p)
+		elif switch == 'getm': sock.send(str(client.mod).encode('utf-8'))
+		elif switch == 'gets': sock.send(str(client.secret).encode('utf-8'))
+		elif switch == 'givs' or switch == 'givf':
+			key = True if switch == 'givf' else False
+			client.getsecret(int(comm.pop(0)), key)
+			if switch == 'givf': print('My key ', client.key) 
+		else: print('Command',comm,'is invalid')
+		if comm: reply(comm)
 
 sock = socket.socket()
 sock.connect(('localhost', 8081))
 client = None
 
 while True:
-	comm = sock.recv(4)
-	comm = comm.decode('utf-8')
-	if comm == 'gtgp':
-		gp = sock.recv(1024)
-		gp = gp.decode('utf-8') #.split(':')
-		gp = gp.split(':')
-		g, p = int(gp[0]),int(gp[1])
-		client = Peer(g,p)
-	elif comm == 'getm': sock.send(str(client.mod).encode('utf-8'))
-	elif comm == 'gets': sock.send(str(client.secret).encode('utf-8'))
-	elif comm == 'givs':
-		secret = sock.recv(1024)
-		client.getsecret(int(secret.decode('utf-8')))
-	elif comm == 'givf':
-		key = sock.recv(1024) 
-		client.getsecret(int(key.decode('utf-8')), key = True)
-		print('My key ', client.key)
-	else: print('Command',comm,'is invalid')
-	comm = ''
+	comm = sock.recv(1024)
+	comm = comm.decode('utf-8').split(':')
+	reply(comm)
 
 sock.close()
