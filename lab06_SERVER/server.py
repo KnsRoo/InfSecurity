@@ -2,12 +2,12 @@ import socket, random, _thread, time
 
 def randomprime():
 	prime = random.randint(32,300)
-	return ((2**prime)-1, random.randint(3,10)) if 2 in [prime,2**prime%prime] else randomprime()
+	return ((2**prime)-1, random.randint(3,10), []) if 2 in [prime,2**prime%prime] else randomprime()
 
 def givesecret(peer, secret, final = False):
-	if final: peer.send('givesf'.encode('utf-8'))
-	else: peer.send('gives'.encode('utf-8'))
-	time.sleep(0.05)   # Кастыль
+	comm = 'givf' if final else 'givs'
+	peer.send(comm.encode('utf-8'))
+	time.sleep(0.15)   # Кастыль
 	peer.send(str(secret).encode('utf-8'))
 	
 def getsecret(peer):
@@ -23,39 +23,32 @@ def getmod(peer):
 	return mod
 
 def start(conn, addr):
-	global g
-	global p
 	for peer in PEERS:
 		gp = str(g)+':'+str(p)
-		peer.send('gp'.encode('utf-8'))
+		peer.send('gtgp'.encode('utf-8'))
+		time.sleep(0.05)   # Кастыль
 		peer.send(gp.encode('utf-8'))
 	for i in range(len(PEERS)):
-		if len(PEERS) == 2:
-			a = getmod(PEERS[(i)%len(PEERS)])
-			givesecret(PEERS[(i+1)%len(PEERS)], a, final = True)
+		if len(PEERS) == 2: givesecret(PEERS[(i+1)%len(PEERS)], getmod(PEERS[(i)%len(PEERS)]), final = True)
 		else:
-			a = getmod(PEERS[(i)%len(PEERS)])
-			givesecret(PEERS[(i+1)%len(PEERS)], a)
+			givesecret(PEERS[(i+1)%len(PEERS)], getmod(PEERS[(i)%len(PEERS)]))
 			j = i+2
 			for x in range(len(PEERS)-3):
-				a = getsecret(PEERS[(j-1)%len(PEERS)])
-				givesecret(PEERS[j%len(PEERS)], a)
+				givesecret(PEERS[j%len(PEERS)], getsecret(PEERS[(j-1)%len(PEERS)]))
 				j+=1
-			a = getsecret(PEERS[(i+len(PEERS)-2)%len(PEERS)])
-			givesecret(PEERS[(i+len(PEERS)-1)%len(PEERS)], a, final = True)
+			givesecret(PEERS[(i+len(PEERS)-1)%len(PEERS)], getsecret(PEERS[(i+len(PEERS)-2)%len(PEERS)]), final = True)
 
 sock = socket.socket()
 sock.bind(('', 8081))
 print('Insert count of clients')
 cl = input()
 sock.listen(int(cl))
-p,g = randomprime()
-PEERS = []
+p,g, PEERS = randomprime()
 
 while True:
 	conn, addr = sock.accept()
 	PEERS.append(conn)
 	print('waiting peers', str(len(PEERS))+'/'+str(cl))
 	if int(cl) == len(PEERS):
-		_thread.start_new_thread(start,(conn,addr))
+		_thread.start_new_thread(start,(conn,addr))		
 conn.close()
