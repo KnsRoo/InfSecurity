@@ -16,28 +16,24 @@ sock.connect(('localhost', 8081))
 client = None
 
 while True:
-	comm = sock.recv(1024)
+	comm = sock.recv(4)
 	comm = comm.decode('utf-8')
-	if comm == 'gp':
+	if comm == 'gtgp':
 		gp = sock.recv(1024)
-		gp = gp.decode('utf-8')
+		gp = gp.decode('utf-8') #.split(':')
 		gp = gp.split(':')
-		g = int(gp[0])
-		p = int(gp[1])
+		g, p = int(gp[0]),int(gp[1])
 		client = Peer(g,p)
-	elif comm == 'getm': 
-		sock.send(str(client.mod).encode('utf-8'))
-	elif comm == 'gets': 
-		sock.send(str(client.secret).encode('utf-8'))
-	elif comm == 'gives':
+	elif comm == 'getm': sock.send(str(client.mod).encode('utf-8'))
+	elif comm == 'gets': sock.send(str(client.secret).encode('utf-8'))
+	elif comm == 'givs':
 		secret = sock.recv(1024)
 		client.getsecret(int(secret.decode('utf-8')))
-	elif comm == 'givesf':
+	elif comm == 'givf':
 		key = sock.recv(1024) 
 		client.getsecret(int(key.decode('utf-8')), key = True)
 		print('My key ', client.key)
-	else:
-		print('Command',comm,'is invalid')
+	else: print('Command',comm,'is invalid')
 	comm = ''
 
 sock.close()
