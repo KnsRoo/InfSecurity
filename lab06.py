@@ -11,7 +11,7 @@ class Peer():
 		self.mod = (self.g**self.k)%self.p
 
 	def getsecret(self, R, key = False):
-		self.secret = (R**self.k)%p
+		self.secret = (R**self.k)%self.p
 		if key: self.key = self.secret
 			
 COUNT = 8
