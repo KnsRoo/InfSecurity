@@ -1,4 +1,4 @@
-import socket, random
+import sys, socket, random
 
 def randomprime():
 	prime = random.randint(32,300)
@@ -32,10 +32,10 @@ def transmit():
 				j+=1
 			givesecret(PEERS[(i+len(PEERS)-1)%len(PEERS)], getsecret(PEERS[(i+len(PEERS)-2)%len(PEERS)]), final = True) 
 
+
 sock = socket.socket()
 sock.bind(('', 8081))
-print('Insert count of clients')
-cl = input()
+cl = int(sys.argv[1])
 sock.listen(int(cl))
 PEERS = []
 
