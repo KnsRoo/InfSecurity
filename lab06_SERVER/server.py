@@ -32,7 +32,6 @@ def transmit():
 				j+=1
 			givesecret(PEERS[(i+len(PEERS)-1)%len(PEERS)], getsecret(PEERS[(i+len(PEERS)-2)%len(PEERS)]), final = True) 
 
-
 sock = socket.socket()
 sock.bind(('', 8081))
 cl = int(sys.argv[1])
