@@ -3,11 +3,11 @@ import socket, random
 class Peer():
 	def __init__(self,g,p):
 		self.g, self.p = g, p
-		self.k = random.randint(100,1000)
-		self.mod = (self.g**self.k)%self.p
+		self.k = random.randint(10*10,10**100)
+		self.mod = pow(self.g,self.k,self.p)
 
 	def getsecret(self, R, key = False):
-		self.secret = (R**self.k)%self.p
+		self.secret = pow(R,self.k,self.p)
 		if key: self.key = self.secret
 
 def reply(comm):

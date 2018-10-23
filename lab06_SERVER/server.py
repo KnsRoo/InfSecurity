@@ -1,8 +1,5 @@
 import sys, socket, random
-
-def randomprime():
-	prime = random.randint(32,300)
-	return ((2**prime)-1, random.randint(3,10)) if 2 in [prime,2**prime%prime] else randomprime()
+from randomtools import randomprime
 
 def givesecret(peer, secret, final = False):
 	comm = 'givf' if final else 'givs'
