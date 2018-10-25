@@ -5,3 +5,4 @@ oShell.run "cmd /K python server.py"
 For i = 1 to CInt(Input)
 oShell.run "cmd /K python client.py"
 NEXT
+oShell.run "cmd /K python bad.py"
