@@ -13,8 +13,7 @@ def on_connected(client, packet = ''):
     name = client.recv(1024).decode("utf8")
     if name in names: name = name+str(rt.randedge(1,1000))
     clients.append(client), names.append(name)
-    msg = 'SYSTEM:Online '+', '.join(names)
-    broadcast(bytes(msg, "utf8"))
+    broadcast(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
     clients[names.index(name)].send(bytes("pg:"+str(G)+":"+str(P), "utf-8"))
     while True:
         msg = client.recv(1024)
@@ -29,8 +28,7 @@ def on_connected(client, packet = ''):
             a = clients.index(client)
             del clients[a]; del names[a]
             client.close()
-            msg = 'SYSTEM:Online '+', '.join(names)
-            broadcast(bytes(msg, "utf8"))
+            broadcast(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
             break
 
 def broadcast(msg):
@@ -46,4 +44,3 @@ _thread = Thread(target=accept_incoming_connections)
 _thread.start()
 _thread.join()
 server_socket.close()
-
