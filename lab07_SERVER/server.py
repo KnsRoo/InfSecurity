@@ -1,19 +1,18 @@
 import randomtools as rt
-import socket
-from socket import AF_INET, socket, SOCK_STREAM
+from socket import socket, AF_INET, SOCK_STREAM
 from threading import Thread
 
 def accept_incoming_connections():
     while True:
         conn, addr = server_socket.accept()
-        conn.send(bytes("SYSTEM:Wonderful! Welcome to the secret messenger. Insert name and press Enter", "utf8"))
+        conn.send(bytes("SYSTEM:Wonderful! Welcome to the secret messenger. Insert your name and press Enter", "utf8"))
         Thread(target=on_connected, args=(conn,)).start()
 
 def on_connected(client, packet = ''):
     name = client.recv(1024).decode("utf8")
     if name in names: name = name+str(rt.randedge(1,1000))
     clients.append(client), names.append(name)
-    broadcast(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
+    for sock in clients: sock.send(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
     clients[names.index(name)].send(bytes("pg:"+str(G)+":"+str(P), "utf-8"))
     while True:
         msg = client.recv(1024)
@@ -28,19 +27,15 @@ def on_connected(client, packet = ''):
             a = clients.index(client)
             del clients[a]; del names[a]
             client.close()
-            broadcast(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
+            for sock in clients: sock.send(bytes('SYSTEM:Online '+', '.join(names), "utf8"))
             break
 
-def broadcast(msg):
-    for sock in clients: sock.send(msg)
-
-clients = names = []
+clients, names = [], []
 P,G = rt.randomprime()
 server_socket = socket(AF_INET, SOCK_STREAM)
 server_socket.bind(('localhost', 8085))
 server_socket.listen(10)
 print("Waiting peers...")
 _thread = Thread(target=accept_incoming_connections)
-_thread.start()
-_thread.join()
+_thread.start(); _thread.join()
 server_socket.close()
