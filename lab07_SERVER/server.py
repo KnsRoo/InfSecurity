@@ -25,7 +25,6 @@ def on_connected(client, packet = ''):
                 for i in range(len(msg)):
                     if i!=1: packet+=msg[i]+':'
                 clients[names.index(msg[1])].send(bytes(packet, "utf-8"))
-
         else:
             a = clients.index(client)
             del clients[a]; del names[a]
@@ -35,10 +34,9 @@ def on_connected(client, packet = ''):
             break
 
 def broadcast(msg):
-    for sock in clients:
-        sock.send(msg)
+    for sock in clients: sock.send(msg)
 
-clients, names = [],[]
+clients = names = []
 P,G = rt.randomprime()
 server_socket = socket(AF_INET, SOCK_STREAM)
 server_socket.bind(('localhost', 8085))
