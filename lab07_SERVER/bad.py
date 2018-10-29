@@ -1,5 +1,4 @@
-import socket
-from socket import AF_INET, socket, SOCK_STREAM
+from socket import socket, AF_INET, socket, SOCK_STREAM
 
 sock = socket(AF_INET, SOCK_STREAM)
 sock.connect(('localhost', 8085))
