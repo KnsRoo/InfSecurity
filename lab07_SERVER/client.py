@@ -1,5 +1,4 @@
-import socket, select, sys, os
-import randomtools as rt
+import sys, os, randomtools as rt
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 
@@ -16,6 +15,7 @@ class Peer():
 		m = self.hash(phrase)
 		y, r = pow(self.g , x, self.p), pow(self.g, k, self.p)
 		s = ((m-x*r)*inv) % (self.p-1)
+		k = None
 		return [y, r, s]
 
 	def check_sign(self, sign):
@@ -39,7 +39,7 @@ def receive():
             else:
             	if Client != None:
                     if (Client.check_sign(msg)): print_(msg[0]+':'+msg[1])
-                    else: print_('Sign invalid')
+                    else: print_('Sign of '+msg[0]+' is invalid')
         except OSError: break
 
 def send(msg): 
