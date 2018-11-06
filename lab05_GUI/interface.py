@@ -5,16 +5,13 @@ from PyQt5.uic import loadUi
 import numpy as np, random
 
 class Window(QMainWindow):
+
     @pyqtSlot()
     def on_oldtext_textChanged(self):
         self.radioButton.setChecked(True)
-        self.generate.setEnabled(False)
-        self.loadto.setEnabled(True)
-        self.hand_mode.setEnabled(False)
-        self.loadfrom.setEnabled(False)
-        self.loadto.setEnabled(False)
+        self.set_property([self.radioButton, self.start, 'enable'])
+        self.set_property([self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
         self.comboBox.clear()
-        self.start.setEnabled(True)
         self.start.setText('Анализ')
         self.progressBar.setValue(0)
 
@@ -37,19 +34,21 @@ class Window(QMainWindow):
             item.setStyleSheet(self.get_QPushButton_style())
             item.setEnabled(True)
 
+    def set_property(self, obj):
+        target = obj.pop()
+        for item in obj:
+            if target == 'enable': item.setEnabled(True)
+            if target == 'disable': item.setEnabled(False)
+
     @pyqtSlot()
     def on_clear_set_clicked(self):
         self.grid, self.M = [], (0,0)
-        self.comboBox.clear()
-        self.comboBox.setEnabled(True)
-        self.clear_layout()
         self.radioButton.setChecked(True)
-        self.start.setText('Анализ')
-        self.start.setEnabled(True)
-        self.generate.setEnabled(False)
-        self.loadfrom.setEnabled(False)
-        self.loadto.setEnabled(False)
-        self.hand_mode.setEnabled(False)
+        self.comboBox.clear()
+        self.clear_layout()
+        self.start.setText('Анализ') 
+        self.set_property([self.comboBox, self.start, 'enable'])
+        self.set_property([self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
         self.progressBar.setValue(0)
 
     @pyqtSlot()
@@ -68,7 +67,7 @@ class Window(QMainWindow):
         if f[0] != '':
             with open(f[0],'r') as file:
                 files = file.read().split('x')
-                x,y = files[0], files[1]
+                x, y = files[0], files[1]
                 files = list(files[2])
                 self.M = (int(x),int(y))
                 self.comboBox.clear()
@@ -103,12 +102,9 @@ class Window(QMainWindow):
 
     @pyqtSlot()
     def on_generate_clicked(self):
-        param = self.comboBox.currentText().split('x')
-        param = list(map(int,param))
-        self.M = (param[1], param[0])
-        self.start.setEnabled(True)
+        self.M = tuple(reversed(tuple(map(int, self.comboBox.currentText().split('x')))))
         self.grid = self.genmatrix(self.M, self.grid, self.progressBar)
-        if param[1]*param[0]<3601:
+        if self.M[0]*self.M[1]<3601:
             self.createtable()
             lines = self.frame.findChildren(QtWidgets.QPushButton)
             for index, item in enumerate(lines):
@@ -118,9 +114,8 @@ class Window(QMainWindow):
             for index, item in np.ndenumerate(self.grid):
                 if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
                 self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
-        self.loadto.setEnabled(True)
+        self.set_property([self.start, self.loadto, 'enable'])
         self.progressBar.setValue(100)
-
 
     @pyqtSlot()
     def on_start_clicked(self):
@@ -133,13 +128,10 @@ class Window(QMainWindow):
             self.comboBox.insertItems(0, a)
             if self.radioButton.isChecked() == True:
                 if a:
-                    self.generate.setEnabled(True)
+                    self.set_property([self.generate, self.loadfrom, 'enable'])
                     if len(self.phrase)<3601: self.hand_mode.setEnabled(True)
-                    self.loadfrom.setEnabled(True)
                     self.start.setText('Преобразовать')
-            else:
-                self.hand_mode.setEnabled(True)
-                self.loadfrom.setEnabled(True)
+            else: self.set_property([self.hand_mode, self.loadfrom, 'enable'])
         elif self.start.text() == 'Преобразовать':
             if self.radioButton.isChecked() == True: self.newtext.setPlainText(self.crypting('encode',self.M, self.grid, self.oldtext.toPlainText()))
             else: self.newtext.setPlainText(self.crypting('decode', self.M, self.grid, self.oldtext.toPlainText()))
@@ -149,22 +141,15 @@ class Window(QMainWindow):
     def matrixclick(self, all_disabled = True):
         sender = self.sender()
         sender.setStyleSheet("background-color: green;" "border: none;")
-        self.pc+=1
         sender.setEnabled(False)
-        a = str(sender.objectName).split('_')
-        x,y = int(a[0]),int(a[1])
-        self.grid[x][y] = 0
-        R,S,U = [x,self.M[1]-y-1], [self.M[0]-x-1,y],[self.M[0]-x-1,self.M[1]-y-1]
-        lines = self.frame.findChildren(QtWidgets.QPushButton)
+        x, y = list(map(int, str(sender.objectName).split('_')))
+        lines, self.pc, self.grid[x][y] = self.frame.findChildren(QtWidgets.QPushButton), self.pc+1, 0
+        m = [str(x)+'_'+str(self.M[1]-y-1), str(self.M[0]-x-1)+'_'+str(y), str(self.M[0]-x-1)+'_'+str(self.M[1]-y-1)]
         self.progressBar.setValue(self.pc/(len(lines)/4)*100)
         for item in lines:
-            if item.objectName == str(R[0])+'_'+str(R[1]): item.setEnabled(False)
-            if item.objectName == str(S[0])+'_'+str(S[1]): item.setEnabled(False)
-            if item.objectName == str(U[0])+'_'+str(U[1]): item.setEnabled(False)
+            if item.objectName in m: item.setEnabled(False)
             if item.isEnabled() == True: all_disabled = False
-        if all_disabled: 
-            self.start.setEnabled(True)
-            self.loadto.setEnabled(True)
+        if all_disabled: self.set_property([self.start, self.loadto, 'enable'])
 
     def clear_layout(self):
         lines = self.frame.findChildren(QtWidgets.QPushButton)
@@ -174,7 +159,7 @@ class Window(QMainWindow):
 
     def createtable(self):
         self.clear_layout()
-        w,h = int(329/self.M[0]),int(329/self.M[1])
+        w, h = int(329/self.M[0]), int(329/self.M[1])
         self.frame.setGeometry(QRect(451,221, (h+1)*self.M[1],(w+1)*self.M[0]))
         for index, item in np.ndenumerate(self.grid):
             button = QPushButton('', self)
@@ -205,16 +190,14 @@ class Window(QMainWindow):
         return ret
 
     def get_QPushButton_style(self):
-        with open('style.css') as style:
-            str = style.read()
+        with open('style.css') as style: str = style.read()
         style.close()
         return str
 
-    def __init__(self,f,g):
+    def __init__(self, f, g):
         QMainWindow.__init__(self)
         self.setMinimumSize(QSize(800, 480))    
         loadUi('form.ui',self) 
         self.setWindowTitle("Метод поворотной решетки")
-        self.genmatrix = f
-        self.crypting = g
+        self.genmatrix, self.crypting = f, g
         self.preinit()
