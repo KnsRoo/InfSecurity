@@ -18,23 +18,16 @@ def crypting(target, M, table, tmp):
 	return ''.join((np.array(tmp)).ravel()) if target == 'encode' else crypt
 
 def genmatrix(M, grid, pg, nul = False):
-	if nul:
-		array = list(np.arange(1,M[0]*M[1]+1))
-		grid = np.array(array).reshape(M)
+	array = list(np.arange(1,M[0]*M[1]+1))
+	grid = np.array(array).reshape(M)
+	if nul: return grid
 	else:
-		array = list(np.arange(1,M[0]*M[1]+1))
-		grid = np.array(array).reshape(M)
-		zeo = int(len(array)/4)
-		for i in range(zeo):
-			pg.setValue(i/zeo*100)
-			random.shuffle(array)
-			rand = array.pop()
-			x,y = np.where(grid == rand)
-			grid[x[0]][y[0]] = 0
-			R,S,U = grid[x[0]][M[1]-y[0]-1], grid[M[0]-x[0]-1][y[0]], grid[M[0]-x[0]-1][M[1]-y[0]-1]
-			if R in array: array.remove(R) 
-			if S in array: array.remove(S)
-			if U in array: array.remove(U)
+	  larr = int(len(array)/4)
+	  for i in range(larr):
+	    pg.setValue(i/larr*100)
+	    x,y = np.where(grid == random.choice(array))
+	    array = list(set(array) - set([grid[x[0]][y[0]], grid[x[0]][M[1]-y[0]-1], grid[M[0]-x[0]-1][y[0]], grid[M[0]-x[0]-1][M[1]-y[0]-1]]))
+	    grid[x[0]][y[0]] = 0
 	pg.setValue(100)
 	return grid
 
