@@ -4,19 +4,19 @@ from threading import Thread
 
 class Peer():
 	def __init__(self, g, p):
-		self.g, self.p = int(g), int(p)
+		self.x, self.g, self.p = 0, int(g), int(p)
 
 	def hash(self, phrase):
 		return sum([ord(i) for i in phrase]) % (self.p-1)
-
+	
 	def create_sign(self, phrase):
-		x = rt.randedge(1,self.p)
 		k, inv = rt.randomk(self.p)
 		m = self.hash(phrase)
-		y, r = pow(self.g , x, self.p), pow(self.g, k, self.p)
-		s = ((m-x*r)*inv) % (self.p-1)
-		k = None
-		return [y, r, s]
+		if self.x == 0:
+			self.x = rt.randedge(1,self.p)
+			self.y, self.r = pow(self.g , self.x, self.p), pow(self.g, k, self.p)
+		s, k = ((m-self.x*self.r)*inv) % (self.p-1), None
+		return [self.y, self.r, s]
 
 	def check_sign(self, sign):
 		if (0 < int(sign[3]) < self.p) and (0 < int(sign[4]) < self.p-1):
