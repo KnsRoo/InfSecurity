@@ -26,7 +26,7 @@ def genmatrix(M, grid, pg, nul = False):
 	  for i in range(larr):
 	    pg.setValue(i/larr*100)
 	    x, y = list(map(lambda x: np.asscalar(x),np.where(grid == random.choice(array))))
-	    array = list(set(array) - set([grid[x][y], grid[x][M[1]-y-1], grid[M[0]-x-1][y], grid[M[0]-x-1][M[1]-y-1]]))
+	    array = list(set(array).difference(set([grid[x][y], grid[x][M[1]-y-1], grid[M[0]-x-1][y], grid[M[0]-x-1][M[1]-y-1]])))
 	    grid[x][y] = 0
 	pg.setValue(100)
 	return grid
