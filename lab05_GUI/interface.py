@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui, QtSvg
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize, Qt, pyqtSlot, QRect
 from PyQt5.uic import loadUi
-import numpy as np, random
+import numpy as np, random, os
 
 class Window(QMainWindow):
 
@@ -66,10 +66,8 @@ class Window(QMainWindow):
         f = QFileDialog.getOpenFileName(self, 'Open file', os.getcwd(),"Key files (*.mrgkey)")
         if f[0] != '':
             with open(f[0],'r') as file:
-                files = file.read().split('x')
-                x, y = files[0], files[1]
-                files = list(files[2])
-                self.M = (int(x),int(y))
+                x, y, files = list(file.read().split('x'))
+                self.M, files = (int(x),int(y)), list(files)
                 self.comboBox.clear()
                 self.comboBox.addItem(y+'x'+x)
                 self.comboBox.setEnabled(False)
