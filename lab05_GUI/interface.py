@@ -171,16 +171,16 @@ class Window(QMainWindow):
     def preinit(self):
         self.M, self.grid, self.pc = (0,0), [], 0
 
-    def append_(self, phrase, pt):
-        pt.setPlainText(phrase)
+    def append_(self, phrase):
         return phrase if len(phrase)%4 == 0: else self.append_(phrase+'.', pt)
 
     def getcombobox(self, phrase, pt):
         phrase = phrase.replace(' ','').replace('\t','').replace('\n','')
-        if len(phrase)%4 != 0: phrase = self.append_(phrase, pt)
-        A, ret, sizeof = [i for i in range(len) if i%2 == 0], [], len(phrase)
+        phrase = self.append_(phrase)
+        pt.setPlainText(phrase)
+        A, ret = [i for i in range(int(len(phrase)/2)+1) if i%2 == 0], []
         for i, j in itertools.product(A,A):
-            if i*j == len: ret.append(str(i)+'x'+str(j)) 
+            if i*j == len(phrase): ret.append(str(i)+'x'+str(j)) 
         return ret
 
     def get_QPushButton_style(self):
