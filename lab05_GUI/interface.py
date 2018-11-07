@@ -172,10 +172,8 @@ class Window(QMainWindow):
         self.M, self.grid, self.pc = (0,0), [], 0
 
     def append_(self, phrase, pt):
-        phrase+='.'
         pt.setPlainText(phrase)
-        if len(phrase)%4 != 0: return self.append_(phrase, pt)
-        else: return phrase
+        return phrase if len(phrase)%4 != 0: else self.append_(phrase+'.', pt)
 
     def getcombobox(self, phrase, pt):
         phrase = phrase.replace(' ','').replace('\t','').replace('\n','')
