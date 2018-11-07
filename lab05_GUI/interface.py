@@ -31,7 +31,7 @@ class Window(QMainWindow):
         self.progressBar.setValue(0)
         lines = self.frame.findChildren(QtWidgets.QPushButton)
         for item in lines:
-            item.setStyleSheet(self.get_QPushButton_style())
+            item.setStyleSheet(self.get_style('hand'))
             item.setEnabled(True)
 
     def set_property(self, obj):
@@ -82,7 +82,7 @@ class Window(QMainWindow):
             if int(x)*int(y)<3601:
                 for index, item in np.ndenumerate(self.grid):
                     self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
-                    if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
+                    if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet(self.get_style('green'))
                     self.progressBar.setValue(100)
             if len(self.phrase) == int(x)*int(y): self.start.setEnabled(True)
             else: self.start.setEnabled(False)
@@ -90,10 +90,10 @@ class Window(QMainWindow):
     @pyqtSlot()
     def on_loadto_clicked(self):
         f = QFileDialog.getSaveFileName(self, 'Save file', os.getcwd(),"Key files (*.mrgkey)")
-        if f[0]!='':
+        if f[0] != '':
             with open(f[0],'w') as file:
                 file.write(str(self.M[0])+'x'+str(self.M[1])+'x')
-                for index,item in np.ndenumerate(self.grid):
+                for index, item in np.ndenumerate(self.grid):
                     if item != 0: item = 1
                     file.write(str(item))
             file.close()
@@ -107,10 +107,10 @@ class Window(QMainWindow):
             lines = self.frame.findChildren(QtWidgets.QPushButton)
             for index, item in enumerate(lines):
                 self.progressBar.setValue(index/len(lines)*100)
-                item.setStyleSheet("background-color: rgb(205, 1, 1);" "border: none;")
+                item.setStyleSheet(self.get_style('red'))
             self.progressBar.setValue(0)
             for index, item in np.ndenumerate(self.grid):
-                if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet("background-color: green;" "border: none;")
+                if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet(self.get_style('green'))
                 self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
         self.set_property([self.start, self.loadto, 'enable'])
         self.progressBar.setValue(100)
@@ -138,7 +138,7 @@ class Window(QMainWindow):
     @pyqtSlot()
     def matrixclick(self, all_disabled = True):
         sender = self.sender()
-        sender.setStyleSheet("background-color: green;" "border: none;")
+        sender.setStyleSheet(self.get_style('green'))
         sender.setEnabled(False)
         x, y = list(map(int, str(sender.objectName).split('_')))
         lines, self.pc, self.grid[x][y] = self.frame.findChildren(QtWidgets.QPushButton), self.pc+1, 0
@@ -158,17 +158,19 @@ class Window(QMainWindow):
     def createtable(self):
         self.clear_layout()
         w, h = int(329/self.M[0]), int(329/self.M[1])
-        self.frame.setGeometry(QRect(451,221, (h+1)*self.M[1],(w+1)*self.M[0]))
+        self.frame.setGeometry(QRect(451,221, (h+1)*self.M[1], (w+1)*self.M[0]))
         for index, item in np.ndenumerate(self.grid):
             button = QPushButton('', self)
             button.setFixedSize(h,w)
             button.setEnabled(False)
-            button.setStyleSheet("background-color: rgb(205, 1, 1);" "border: none;")
+            button.setStyleSheet(self.get_style('red'))
             button.objectName = str(index[0])+'_'+str(index[1])
             button.clicked.connect(self.matrixclick)
             self.gridLayout.addWidget(button, index[0], index[1])
 
     def preinit(self):
+        with open('style.css') as style: self.btn = style.read()
+        style.close()
         self.M, self.grid, self.pc = (0,0), [], 0
 
     def append_(self, phrase):
@@ -183,10 +185,9 @@ class Window(QMainWindow):
             if i*j == len(phrase): ret.append(str(j)+'x'+str(i)) 
         return ret
 
-    def get_QPushButton_style(self):
-        with open('style.css') as style: str = style.read()
-        style.close()
-        return str
+    def get_style(self, color):
+        switch = { 'hand': self.btn, 'red': "background-color: rgb(205, 1, 1);" "border: none;", 'green': "background-color: rgb(4, 119, 4);" "border: none;" }
+        return switch[color]
 
     def __init__(self, f, g):
         QMainWindow.__init__(self)
