@@ -180,11 +180,9 @@ class Window(QMainWindow):
     def getcombobox(self, phrase, pt):
         phrase = phrase.replace(' ','').replace('\t','').replace('\n','')
         if len(phrase)%4 != 0: phrase = self.append_(phrase, pt)
-        ret, sizeof = [], len(phrase)
-        for i in range(sizeof):
-            for j in range(sizeof):
-                if (i%2==0 and j%2==0):
-                    if i*j == sizeof: ret.append(str(j)+'x'+str(i))
+        A, ret, sizeof = [i for i in range(len) if i%2 == 0], [], len(phrase)
+        for i, j in itertools.product(A,A):
+            if i*j == len: ret.append(str(i)+'x'+str(j)) 
         return ret
 
     def get_QPushButton_style(self):
