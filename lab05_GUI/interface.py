@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui, QtSvg
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize, Qt, pyqtSlot, QRect
 from PyQt5.uic import loadUi
-import numpy as np, random, os
+import numpy as np, random, os, itertools
 
 class Window(QMainWindow):
 
@@ -123,7 +123,7 @@ class Window(QMainWindow):
             self.comboBox.clear()
             self.comboBox.setEnabled(True)
             a = self.getcombobox(self.phrase, self.oldtext)
-            self.comboBox.insertItems(0, a)
+            self.comboBox.addItems(a)
             if self.radioButton.isChecked() == True:
                 if a:
                     self.set_property([self.generate, self.loadfrom, 'enable'])
@@ -172,7 +172,7 @@ class Window(QMainWindow):
         self.M, self.grid, self.pc = (0,0), [], 0
 
     def append_(self, phrase):
-        return phrase if len(phrase)%4 == 0: else self.append_(phrase+'.', pt)
+        return phrase if len(phrase)%4 == 0 else self.append_(phrase+'.')
 
     def getcombobox(self, phrase, pt):
         phrase = phrase.replace(' ','').replace('\t','').replace('\n','')
