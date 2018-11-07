@@ -180,7 +180,7 @@ class Window(QMainWindow):
         pt.setPlainText(phrase)
         A, ret = [i for i in range(int(len(phrase)/2)+1) if i%2 == 0], []
         for i, j in itertools.product(A,A):
-            if i*j == len(phrase): ret.append(str(i)+'x'+str(j)) 
+            if i*j == len(phrase): ret.append(str(j)+'x'+str(i)) 
         return ret
 
     def get_QPushButton_style(self):
