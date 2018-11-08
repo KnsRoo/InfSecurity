@@ -10,6 +10,12 @@ Shift each symbol in line for k.
 
 Let alphabet = 'abcd', let line = 'abcd'
 
+| a | b | c | d |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+|   |   |   |   |   |
+|   |   |   |   |   |
+
 for k = 1:
 | a | b | c | d |  |
 |---|---|---|---|---| ->
