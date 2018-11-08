@@ -11,6 +11,7 @@ Shift each symbol in line for k.
 Let alphabet = 'abcd', let line = 'abcd'
 
 for k = 1:
+a | b | c | d 
 -|-|-|-
 a | b | c | d 
 -> 
