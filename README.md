@@ -149,18 +149,25 @@ Let the substitutional letter E.
 ### Example 1
 Let we need code phrase 'BACFAAG'.
 Split:
+
 | BA | CF | AA | G |
 |---|---|---|---|
+
 We need to insert E in pair 'AA':
+
 | BA | CF | AE | AG |
 |---|---|---|---|
+
 Good. 
 ### Example 2
 Let we need code phrase 'BACFCAG'.
 Split:
+
 | BA | CF | CA | G |
 |---|---|---|---|
+
 We need to insert E in the end:
+
 | BA | CF | CA | GE |
 |---|---|---|---|
 
@@ -170,17 +177,24 @@ We need to insert E in the end:
 |---|---|---|---|---|
 | 0 | B | C | F | G |
 | 1 | A | D | E | H |
+
 Our phrase:
+
 | BA | CF | AG |
 |---|---|---|
 
 If pair are located in one row, then we shift down for 1 and replace:
+
 | BA | -> | AB |
 |---|---|---|
+
 If pair are located in one column, the we shift right for 1 and replace:
+
 | CF | -> | FG |
 |---|---|---|
+
 Else we must take the letters standing at the intersection:
+
 | AG | -> | HB |
 |---|---|---|
 
