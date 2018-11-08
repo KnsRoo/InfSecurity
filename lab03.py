@@ -7,16 +7,12 @@ def createtable(table, key, crypt):
 
 def crypting_visiner(target, alp, table, key, crypt, phrase = ''):
     for i, item in enumerate(crypt):
-        m = alp.index(key[i])
-        n = alp.index(item) if target == 'encode' else np.where(table[m] == crypt[i])
-        phrase+=table[m][n] if target == 'encode' else alp[n[0][0]]
+        phrase += table[alp.index(key[i]), alp.index(item)] if target == 'encode' else alp[np.asscalar(np.where(table[alp.index(key[i])] == crypt[i])[0])]
     return phrase
     
 def crypting_vernon(target, alp, key, crypt, phrase = ''):
     for i, item in enumerate(crypt):
-        m, n = alp.index(crypt[i]), alp.index(key[i])
-        n = n if target == 'encode' else -n
-        phrase+=alp[(m+n)%32]
+        phrase += alp[(alp.index(crypt[i])+alp.index(key[i]))%32] if target == 'encode' else alp[(alp.index(crypt[i])-alp.index(key[i]))%32]
     return phrase
 
 alp, crypt, key = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ", 'МЫ ОТКРЫВАЕМ СЕБЯ', 'ПАРОЛЬ'
