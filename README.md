@@ -44,7 +44,7 @@ Function crypting can code and decode line. It determined by "target" variable. 
 * k_and_f - (int, list), shift if encoding, or filter of bigrams if decoding;
 * ret = '' - str, initial line for return.
 
-###Details:
+### Details:
 
 ```
 alp = 'abcd'
@@ -74,7 +74,7 @@ def crypting(alp, crypt, k, ret = ''):
 
 Decoding done by analogy, but we check all shifts and need filter for bad variants
 
-###Details
+### Details
 
 ```
 ... # our variables
