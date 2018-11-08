@@ -14,7 +14,6 @@ def crypting(target, alp, keyword, crypt, phrase = ''):
     z, f = (4, 5) if target == 'encode' else (1, 1)
     table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))), (5,6))
     crypt = [''.join(i) for i in groupby(crypt,target)]
-    print(crypt)
     for i, j in crypt:
         y1, x1 = list(map(np.asscalar, np.where(table == i)))
         y2, x2 = list(map(np.asscalar, np.where(table == j)))
