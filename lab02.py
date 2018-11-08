@@ -11,15 +11,15 @@ def groupby(iterable, target):
     return zip(*([iter(iterable)] * 2))
 
 def crypting(target, alp, keyword, crypt, phrase = ''):
-    z,f = 4 if target == 'encode' else 1, 5 if target == 'encode' else 1
+    z, f = (4, 5) if target == 'encode' else (5, 1)
     table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))),(5,6))
     crypt = [''.join(i) for i in groupby(crypt,target)]
     for item in crypt:
-        y1,x1 = np.where(table == item[0])
-        y2,x2 = np.where(table == item[1])
-        if x1 == x2: phrase+=table[y1[0]-z][x1[0]]+table[y2[0]-z][x2[0]]
-        elif y1 == y2: phrase+=table[y1[0]][x1[0]-f]+table[y2[0]][x2[0]-f]
-        else: phrase+=table[y1[0]][x2[0]]+table[y2[0]][x1[0]]
+        y1, x1 = list(map(lambda x: np.asscalar(x), np.where(table == item[0])))
+        y2, x2 = list(map(lambda x: np.asscalar(x), np.where(table == item[1])))
+        if x1 == x2: phrase+=table[y1-z][x1]+table[y2-z][x2]
+        elif y1 == y2: phrase+=table[y1][x1-f]+table[y2][x2-f]
+        else: phrase+=table[y1][x2]+table[y2][x1]
     return phrase
 
 if __name__ == '__main__':
