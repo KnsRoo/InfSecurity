@@ -329,6 +329,7 @@ We get 2 letters from column and search interception of them.
 
 ### Example
 D X B = A
+
 || a | b | c | d |
 |---|---|---|---|---|
 | a |  | * |  |  |
