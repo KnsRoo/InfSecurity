@@ -73,7 +73,7 @@ def crypting(alp, crypt, k, ret = ''):
 
 Decoding done by analogy, but we check all shifts and need filter for bad variants
 
-### Details
+### Details:
 
 ```python
 ... # our variables
@@ -94,7 +94,7 @@ Lets make a function for check bad variants. Values:
 ```python
 def exists(tmp, filter, ret = True):
       for item in filter:
-           if tmp.count(item) != 0 ret = False # if tmp not exists one of bad variants
+           if tmp.count(item) != 0: ret = False # if tmp not exists one of bad variants
       return ret
 ```
 
@@ -116,7 +116,7 @@ Simple it:
 ```python
 def decrypting(alp, crypt, filter, ret = ''):
      for k in range(1,len(alp)):
-          tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
+          tmp = [alp[(alp.index(crypt[i])-k % len(alp))] for i in range(len(crypt))]
           ret += str(k)+' '+''.join(tmp)+'\n' if exists(''.join(tmp), k_and_f) else ''
      return ret
 ```
@@ -128,7 +128,7 @@ def crypting(target, alp, crypt, k_and_f, ret = ''):
     if target == 'encode': return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
     else:
         for k in range(1,len(alp)):
-            tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
+            tmp = [alp[(alp.index(crypt[i])-k % len(alp)] for i in range(len(crypt))]
             ret += str(k)+' '+''.join(tmp)+'\n' if exists(''.join(tmp), k_and_f) else ''
         return ret
 ```
