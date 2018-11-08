@@ -303,3 +303,181 @@ def crypting(target, alp, keyword, crypt, phrase = ''):
     return phrase
 ```
 # Ready
+
+# Laboratory work №3
+Shifres of Visiner and Vernon
+## Principle by Visiner
+We need to create a matrix, which contains all variants of cesar's shift.
+Let alphabet = 'abcd', then matrix:
+
+|| a | b | c | d |
+|---|---|---|---|---|
+| a | A | B | C | D |
+| b | B | C | D | A |
+| c | C | D | A | B |
+| d | D | A | B | C |
+
+And we also need a key. 
+Let phrase = 'ACDCBCAA', key = 'CAB'
+After we must duplicate key while it not equal phrase length.
+
+| A | C | D | C | B | C | A | A |
+|---|---|---|---|---|---|---|---|
+| C | A | B | C | A | B | C | A |
+
+We get 2 letters from column and search interception of them.
+
+### Example
+D X B = A
+|| a | b | c | d |
+|---|---|---|---|---|
+| a |  | * |  |  |
+| b |  | * |  |  |
+| c |  | * |  |  |
+| d | * | A |  |  |
+
+In result:
+
+| C | C | A | A | B | D | C | A |
+|---|---|---|---|---|---|---|---|
+
+Back by Analogy.
+
+## Principle by Vernon
+
+In that vatiant we don't need matrix. We will use what we know the index of the element.
+Really:
+
+| 0 | 1 | 2 | 3 |
+|---|---|---|---|
+| A | B | C | D |
+
+Get values from part 1:
+
+| A | C | D | C | B | C | A | A |
+|---|---|---|---|---|---|---|---|
+| C | A | B | C | A | B | C | A |
+
+Index of new element = (index top element + index bottom element) % len(alp)
+
+### Example
+
+Index D = 3
+Index B = 1
+3+1 = 4 % 4 = 0
+Element with Index 0 = A
+D X B = A
+
+In result:
+
+| C | C | A | A | B | D | C | A |
+|---|---|---|---|---|---|---|---|
+
+Back by Analogy.
+
+## Coding
+Functions of crypting for each method can code and decode line. It determined by "target" variable. Function accept values:
+
+* target - str, can be 'encode' or 'decode';
+* alp - list, current alphabet for coding, decoding;
+* key - str, current keyword
+* crypt - str, line, which needs in coding or decoding;
+
+### Details Visiner's method
+
+Creating matrix of cesar's shift and prepare key:
+```python
+# create table
+alp = list('abcd') 
+table = np.array(alp) 
+size = len(table)-1 # Size of alphabet
+for i in range(size):
+    # Preparing row. 
+    # np.roll shift each element (table[size) for 1 letter left (-1) on x axis (axis = 0) 
+    next_row = np.roll(table[size], -1, axis=0) 
+    table = np.vstack((table,next_row) # Insert next_row in the table from bottom
+# prepare key
+key = 'CAB'
+k = len(crypt)/len(key) # Calculating coefficient ( now 8/3 = 2.66...) 
+k = math.ceil(coef) # round to 3
+key = key*coef # Duplicate key k times. (3 times)
+key = key[:len(crypt] # Cut key
+```
+
+Let create a function and simplify it:
+
+```python
+def createtable(table, key, crypt):
+    for i in range(len(table[0])-1):
+        table = np.vstack((table,np.roll(table[len(table)-1], -1, axis=0)))
+    return table, str(key*math.ceil((len(crypt))/len(key)))[:len(crypt)]
+```
+
+Let's crypting:
+
+```python
+...
+result = '' 
+for i, item in crypt:
+    index_phrase_char =  alp.index(item)
+    index_key_char = alp.index(key[i])
+    result = result + table[ index_key_char ] [ index_phrase_char ] # add interception letter
+```
+
+Creating function, simplifying it:
+
+```python
+def crypting_visiner(alp, table, key, crypt):
+    return ''.join([table[alp.index(key[i]), alp.index(item)] for i, item in enumerate(crypt)])
+```
+
+## Decoding
+
+Decoding by analogy, but we must find x axis index of element inside matrix.
+
+```python
+result = '' 
+for i, item in crypt:
+    index_phrase_char =  alp.index(item)
+    index_key_char = alp.index(key[i])
+    x, y = np.where(table[ index_key_char ] == crypt[i]) # get x position
+    result = result + alp[x] # add letter standing on x position in table
+```
+
+Simplify it:
+
+```python
+def decrypting_visiner(alp, table, key, crypt):
+    return ''.join(alp[np.asscalar(np.where(table[alp.index(key[i])] == crypt[i])[0])] for i, item in enumerate(crypt)])
+```
+Combine functions with a variable target:
+```python
+def crypting_visiner(target, alp, table, key, crypt):
+    return ''.join([table[alp.index(key[i]), alp.index(item)] if target == 'encode' else alp[np.asscalar(np.where(table[alp.index(key[i])] == crypt[i])[0])] for i, item in enumerate(crypt)])
+```
+
+## Coding
+
+### Details Vernon's method
+```python
+result = ''
+for i, item in crypt:
+    index_phrase_char =  alp.index(item)
+    index_key_char = alp.index(key[i])
+    new_index = (index_phrase_char + index_key_char) % len(alp) 
+    result = result + alp[new_index]
+```
+## Decoding
+Decoding algorithm the same, with one replace:
+```python
+...
+new_index = (index_phrase_char - index_key_char) % len(alp) 
+...
+```
+Lets make functions and combine them with variable target:
+
+```python
+def crypting_vernon(target, alp, key, crypt, phrase = ''):
+    return ''.join([alp[(alp.index(crypt[i])+alp.index(key[i]))%len(alp] if target == 'encode' else alp[(alp.index(crypt[i])-alp.index(key[i]))%len(alp] for i, item in enumerate(crypt)])
+```
+# Ready
