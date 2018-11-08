@@ -11,19 +11,12 @@ Shift each symbol in line for k.
 Let alphabet = 'abcd', let line = 'abcd'
 
 for k = 1:
-a | b | c | d 
--|-|-|-
-a | b | c | d 
--> 
--|-|-|-
-b | c | d | a
+| a | b | c | d | -> | b | c | d | a |
+
 
 for k = 2:
--|-|-|-
-a | b | c | d 
--> 
--|-|-|-
-c | d | a | b
+
+| a | b | c | d | -> | c | d | a | b |
 
 Back by analogy
 
