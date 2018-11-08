@@ -126,3 +126,166 @@ def crypting(target, alp, crypt, k_and_f, ret = ''):
 ```
 
 # Ready
+
+# Laboratory work №2
+Playfer algorithm
+## Principle
+We need to create a matrix, which contains key and remaining letter of alphabet.
+Let alp = 'abcdefgh', key = 'bcfg' 
+Then Matrix:
+
+| | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| 0 | B | C | F | G |
+| 1 | A | D | E | H |
+
+With the matrix we coding phrase. 
+## Preparing
+Split phrase on pairs:
+If in pair only one letter, or two same letters, we need insert substitutional letter between them
+or in the end of phrase. 
+
+Let the substitutional letter E.
+### Example 1
+Let we need code phrase 'BACFAAG'.
+Split:
+| BA | CF | AA | G |
+|---|---|---|---|
+We need to insert E in pair 'AA':
+| BA | CF | AE | AG |
+|---|---|---|---|
+Good. 
+### Example 2
+Let we need code phrase 'BACFCAG'.
+Split:
+| BA | CF | CA | G |
+|---|---|---|---|
+We need to insert E in the end:
+| BA | CF | CA | GE |
+|---|---|---|---|
+
+## Crypt
+
+| | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| 0 | B | C | F | G |
+| 1 | A | D | E | H |
+Our phrase:
+| BA | CF | AG |
+|---|---|---|
+
+If pair are located in one row, then we shift down for 1 and replace:
+| BA | -> | AB |
+|---|---|---|
+If pair are located in one column, the we shift right for 1 and replace:
+| CF | -> | FG |
+|---|---|---|
+Else we must take the letters standing at the intersection:
+| AG | -> | HB |
+|---|---|---|
+
+Back for Analogy
+
+## Coding
+Function crypting can code and decode line. It determined by "target" variable. Function accept values:
+
+* target - str, can be 'encode' or 'decode';
+* alp - list, current alphabet for coding, decoding;
+* keyword - list, current keyword
+* crypt - str, line, which needs in coding or decoding;
+* phrase - str, initial line for return.
+
+### Details
+
+Creating matrix of letters:
+```python
+def crypting(alp, keyword, crypt):
+    m, n = 4,2 #size of our table
+    str = keyword + alp
+    newstr = ''
+    for item in str:
+        if not str in newstr: # if item not exist in list, append them
+            newstr+=str
+    table = list(newstr)
+    table = np.reshape(table, (m,n)) #Create matrix of letters
+```
+
+Simple it:
+
+```python
+...
+    table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))), (4,2))
+```
+
+After creating table we need prepare our phrase:
+
+```python
+for i in range(0,len(crypt)-1,2): # step 2, because we need a bigrams
+    if crypt[i] == crypt[i+1]:  #if neighbors are equal, insert special symbol between them
+        crypt = crypt[:i+1]+'E'+crypt[i+1:]
+    if len(crypt) % 2 != 0: crypt+='E' # if length of phrase odd, insert special symbol in the end
+    crypt = crypt.replace(' ','') # replace spaces...
+    crypt = crypt.replace('X','A') # ...and missing letters
+```
+
+Let's create function and simple it:
+
+```python
+def groupby(iterable, target):
+        for i in range(0,len(iterable)-1,2):
+            if iterable[i] == iterable[i+1]: iterable = iterable[:i+1]+'E'+iterable[i+1:]
+        if len(iterable) % 2 != 0: iterable+='E' 
+        iterable = iterable.translate(''.maketrans('X','A')).replace(' ', '')
+    return zip(*([iter(iterable)] * 2)) # return list of bigrams
+```
+
+Return two our table. Let's take a list of bigrams:
+
+```python
+...
+    table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))), (5,6))
+    crypt = [''.join(i) for i in groupby(crypt,target)]
+```
+
+Let's start coding our phrase:
+
+```python
+...
+for i, j in crypt: # i and j = 'E' and 'A' if bigram was 'EA'
+    #we need to get positions of elements i,j
+    y1, x1 = list(map(np.asscalar, np.where(table == i)))
+    y2, x2 = list(map(np.asscalar, np.where(table == j)))
+    # if letters in one column
+    if x1 == x2: phrase+=table[y1+1][x1]+table[y2+1][x2]
+    # if letter in one row
+    elif y1 == y2: phrase+=table[y1][x1+1]+table[y2][x2+1]
+    # else
+    else: phrase+=table[y1][x2]+table[y2][x1]
+return phrase
+```
+
+Decoding by analogy in reverse order. Let's add in our functions
+ability for decoding with variable target and simple it:
+
+```python
+def groupby(iterable, target):
+    if target == 'encode':
+        for i in range(0,len(iterable)-1,2):
+            if iterable[i] == iterable[i+1]: iterable = iterable[:i+1]+'E'+iterable[i+1:]
+        if len(iterable) % 2 != 0: iterable+='E' 
+        iterable = iterable.translate(''.maketrans('X','A')).replace(' ', '')
+    return zip(*([iter(iterable)] * 2))
+
+def crypting(target, alp, keyword, crypt, phrase = ''):
+    z, f = (4, 5) if target == 'encode' else (1, 1)
+    table = np.reshape(list(OrderedDict(zip(keyword + alp, repeat(None)))), (5,6))
+    crypt = [''.join(i) for i in groupby(crypt,target)]
+    for i, j in crypt:
+        y1, x1 = list(map(np.asscalar, np.where(table == i)))
+        y2, x2 = list(map(np.asscalar, np.where(table == j)))
+        if x1 == x2: phrase+=table[y1-z][x1]+table[y2-z][x2]
+        elif y1 == y2: phrase+=table[y1][x1-f]+table[y2][x2-f]
+        else: phrase+=table[y1][x2]+table[y2][x1]
+    return phrase
+```
+# Ready
