@@ -11,12 +11,18 @@ Shift each symbol in line for k.
 Let alphabet = 'abcd', let line = 'abcd'
 
 for k = 1:
-
-a | b | c | d -> b | c | d | a
+-|-|-|-
+a | b | c | d 
+-> 
+-|-|-|-
+b | c | d | a
 
 for k = 2:
-
-a | b | c | d -> c | d | a | b
+-|-|-|-
+a | b | c | d 
+-> 
+-|-|-|-
+c | d | a | b
 
 Back by analogy
 
@@ -100,17 +106,17 @@ for k in range(1, len(alp): #check for all shifts
 
 Simple it:
 
-'''
+```
 def decrypting(alp, crypt, filter, ret = ''):
      for k in range(1,len(alp)):
           tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
           ret += str(k)+' '+''.join(tmp)+'\n' if exists(''.join(tmp), k_and_f) else ''
      return ret
-'''
+```
 
 Let's combine functions with a variable target:
 
-'''
+```
 def crypting(target, alp, crypt, k_and_f, ret = ''):
     if target == 'encode': return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
     else:
@@ -118,6 +124,6 @@ def crypting(target, alp, crypt, k_and_f, ret = ''):
             tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
             ret += str(k)+' '+''.join(tmp)+'\n' if exists(''.join(tmp), k_and_f) else ''
         return ret
-'''
+```
 
 # Ready
