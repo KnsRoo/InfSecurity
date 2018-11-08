@@ -46,7 +46,7 @@ Function crypting can code and decode line. It determined by "target" variable. 
 
 ### Details:
 
-```
+```python
 alp = 'abcd'
 crypt = 'abcd'
 k = 1 #shift
@@ -56,7 +56,7 @@ ret = '' # answer
 for i in range(size):
       symbol = crypt[i] #current symbol with shift
       index = alp.index(symbol) # index symbol in alp
-      newindex = (index + k) % 4 # index of shifted symbol by modul length alphabet
+      newindex = (index + k) % len(alp) # index of shifted symbol by modul length alphabet (4)
       newsymbol = alp[newindex] # new symbol
       ret+=newsymbol
 ret = str(k) + ' '+ ret # return ready line with caption of shift
@@ -64,8 +64,7 @@ ret = str(k) + ' '+ ret # return ready line with caption of shift
 
 Simple it
 
-```
-
+```python
 def crypting(alp, crypt, k, ret = ''):
      return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % len(alp)] for i in range(len(crypt))])
 ```
@@ -76,7 +75,7 @@ Decoding done by analogy, but we check all shifts and need filter for bad varian
 
 ### Details
 
-```
+```python
 ... # our variables
 filter = ['bc', 'cd'] #bad variants
 
@@ -92,7 +91,7 @@ Lets make a function for check bad variants. Values:
 * filter - list, our list of bad variants
 * ret - Bool, return True if bad exists, else False 
 
-```
+```python
 def exists(tmp, filter, ret = True):
       for item in filter:
            if tmp.count(item) != 0 ret = False # if tmp not exists one of bad variants
@@ -101,7 +100,7 @@ def exists(tmp, filter, ret = True):
 
 Let's continue:
 
-```
+```python
 filter = ['bc', 'cd'] #bad variants
 
 for k in range(1, len(alp): #check for all shifts
@@ -114,7 +113,7 @@ for k in range(1, len(alp): #check for all shifts
 
 Simple it:
 
-```
+```python
 def decrypting(alp, crypt, filter, ret = ''):
      for k in range(1,len(alp)):
           tmp = [alp[(alp.index(crypt[i])-k % 32)] for i in range(len(crypt))]
@@ -124,7 +123,7 @@ def decrypting(alp, crypt, filter, ret = ''):
 
 Let's combine functions with a variable target:
 
-```
+```python
 def crypting(target, alp, crypt, k_and_f, ret = ''):
     if target == 'encode': return str(k_and_f)+' '+''.join([alp[(alp.index(crypt[i])+k_and_f) % 32] for i in range(len(crypt))])
     else:
