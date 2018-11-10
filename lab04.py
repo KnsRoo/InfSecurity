@@ -2,9 +2,7 @@ import itertools, numpy as np
 
 def crypting(phrase, key, tgt):
 	tmp, ret = np.array(phrase), ''.join([str(item+1) for item in key ])
-	for i, item in enumerate(key):
-		m, k = (i, int(item)) if tgt else (int(item),i)
-		tmp[::,m] = phrase[::,k]
+	for i, item in enumerate(key): tmp[::,i if tgt else int(item)] = phrase[::,int(item) if tgt else i]
 	return ret+' '+''.join(tmp.ravel()) if tgt else ret+' '+''.join(tmp.T.ravel())
 
 def encrypt(crypt, key):
