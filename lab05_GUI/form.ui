@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>Метод поворотной решетки</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background: #36373b;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="frame">
     <property name="geometry">
@@ -27,7 +30,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(37, 231, 234)</string>
+     <string notr="true">background-color: #1a1b1f;</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -48,6 +51,18 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
       <property name="spacing">
        <number>1</number>
       </property>
@@ -63,6 +78,21 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">#progressBar {
+	color: white;
+	font-weight: bold;
+    border: 1px solid #1a1b1f;;
+    border-radius: 5px;
+	background: #3e3f43;
+	text-align: center;
+}
+
+#progressBar::chunk {
+    background: url(images/pgicon.png);
+    width: 45px;
+}</string>
+    </property>
     <property name="value">
      <number>0</number>
     </property>
@@ -77,10 +107,19 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>10</y>
       <width>411</width>
       <height>191</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;
+border-style: outset;
+border-width: 1px;
+border-color: #1a1b1f;
+border-radius: 5px;
+background: #3e3f43;
+font-weight: bold;</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="newtext">
@@ -92,6 +131,15 @@
       <height>191</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;
+border-style: outset;
+border-width: 1px;
+border-color: #1a1b1f;
+border-radius: 5px;
+background: #3e3f43;
+font-weight: bold;</string>
+    </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
@@ -101,6 +149,10 @@
       <width>331</width>
       <height>151</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;
+font-weight: bold;</string>
     </property>
     <property name="title">
      <string>Ключ</string>
@@ -116,6 +168,51 @@
        <width>131</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#generate{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#generate:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#generate:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#generate:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
      </property>
      <property name="text">
       <string>Сгенерировать</string>
@@ -133,6 +230,51 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">#hand_mode{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#hand_mode:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#hand_mode:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#hand_mode:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
+     </property>
      <property name="text">
       <string>Ввести вручную</string>
      </property>
@@ -148,6 +290,51 @@
        <width>131</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#loadfrom{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#loadfrom:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#loadfrom:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#loadfrom:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
      </property>
      <property name="text">
       <string>Загрузить из файла</string>
@@ -165,11 +352,59 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">#loadto{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#loadto:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#loadto:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#loadto:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
+     </property>
      <property name="text">
       <string>Выгрузить в файл</string>
      </property>
     </widget>
     <widget class="QComboBox" name="comboBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -177,6 +412,63 @@
        <width>141</width>
        <height>22</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#comboBox, comboBox:enabled, #comboBox:on #comboBox:editable{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 2px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+
+#comboBox:drop-down {
+	color: white;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#comboBox:down-arrow {
+    image: url(images/arrow.png);
+}
+
+#comboBox:down-arrow:on {
+    image: url(images/arrowup.png);
+}
+
+ #comboBox:!editable, comboBox:drop-down:editable {
+	 color: white;
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+}
+
+#comboBox:disabled{
+	background-color: #1a1b1f;
+}
+
+
+#comboBox:!editable:on, #comboBox:drop-down:editable:on {
+	color: white;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+}
+
+#comboBox QAbstractItemView {
+    color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 2px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+    selection-background-color: #b2b3b5;
+}</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -201,6 +493,51 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">#clear_set{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#clear_set:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#clearset:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#clear_set:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
+     </property>
      <property name="text">
       <string>Сбросить</string>
      </property>
@@ -215,6 +552,51 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">#start{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#start:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#start:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}
+
+#start:disabled{
+	color: #1a1b1f;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}</string>
+    </property>
     <property name="text">
      <string>Анализ</string>
     </property>
@@ -228,6 +610,10 @@
       <height>91</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: white;
+font-weight: bold;</string>
+    </property>
     <property name="title">
      <string>Цель</string>
     </property>
@@ -236,7 +622,7 @@
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>91</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -252,7 +638,7 @@
       <rect>
        <x>10</x>
        <y>60</y>
-       <width>101</width>
+       <width>121</width>
        <height>17</height>
       </rect>
      </property>
@@ -270,6 +656,40 @@
       <height>81</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">#swap{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#swap:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#swap:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}</string>
+    </property>
     <property name="text">
      <string>↕</string>
     </property>
@@ -282,6 +702,40 @@
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#clmemo{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #494c51, stop: 1.0 #3a3b3f);
+	font-weight: bold;
+}
+
+#clmemo:hover{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #52555a, stop: 1.0 #3f4044);
+	font-weight: bold;
+}
+
+#clmemo:pressed{
+	color: white;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #1a1b1f;
+	border-radius: 5px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #34383b,  stop: 1.0 #44474c);
+	font-weight: bold;
+}</string>
     </property>
     <property name="text">
      <string>x</string>

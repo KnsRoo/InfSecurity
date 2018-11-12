@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui, QtSvg
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize, Qt, pyqtSlot, QRect
 from PyQt5.uic import loadUi
-import numpy as np, random, os, itertools
+import numpy as np, random, os, itertools, time
 
 class Window(QMainWindow):
 
@@ -10,7 +10,7 @@ class Window(QMainWindow):
     def on_oldtext_textChanged(self):
         self.radioButton.setChecked(True)
         self.set_property([self.radioButton, self.start, 'enable'])
-        self.set_property([self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
+        self.set_property([self.comboBox, self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
         self.comboBox.clear()
         self.start.setText('Анализ')
         self.progressBar.setValue(0)
@@ -20,19 +20,6 @@ class Window(QMainWindow):
 
     @pyqtSlot()
     def on_radioButton_2_clicked(self): self.start.setText('Преобразовать')
-
-    @pyqtSlot()
-    def on_hand_mode_clicked(self):
-        self.start.setEnabled(False)
-        t = self.comboBox.currentText().split('x')
-        self.M, self.pc = (int(t[1]),int(t[0])), 0
-        self.grid = self.genmatrix(self.M, self.grid, self.progressBar, nul = True)
-        self.createtable()
-        self.progressBar.setValue(0)
-        lines = self.frame.findChildren(QtWidgets.QPushButton)
-        for item in lines:
-            item.setStyleSheet(self.get_style('hand'))
-            item.setEnabled(True)
 
     def set_property(self, obj):
         target = obj.pop()
@@ -47,8 +34,8 @@ class Window(QMainWindow):
         self.comboBox.clear()
         self.clear_layout()
         self.start.setText('Анализ') 
-        self.set_property([self.comboBox, self.start, 'enable'])
-        self.set_property([self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
+        self.set_property([self.start, 'enable'])
+        self.set_property([self.comboBox, self.generate, self.loadfrom, self.loadto, self.hand_mode, 'disable'])
         self.progressBar.setValue(0)
 
     @pyqtSlot()
@@ -72,7 +59,7 @@ class Window(QMainWindow):
                 self.comboBox.addItem(y+'x'+x)
                 self.comboBox.setEnabled(False)
                 self.grid = np.zeros(self.M)
-                self.createtable()
+                self.createtable(False)
                 for index, item in np.ndenumerate(self.grid):
                     self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
                     self.grid[index[0]][index[1]] = files.pop(0)
@@ -103,22 +90,19 @@ class Window(QMainWindow):
         self.M = tuple(reversed(tuple(map(int, self.comboBox.currentText().split('x')))))
         self.grid = self.genmatrix(self.M, self.grid, self.progressBar)
         if self.M[0]*self.M[1]<3601:
-            self.createtable()
+            self.createtable(False)
             lines = self.frame.findChildren(QtWidgets.QPushButton)
-            for index, item in enumerate(lines):
-                self.progressBar.setValue(index/len(lines)*100)
-                item.setStyleSheet(self.get_style('red'))
             self.progressBar.setValue(0)
             for index, item in np.ndenumerate(self.grid):
                 if item == 0: lines[index[0]*self.M[1]+index[1]].setStyleSheet(self.get_style('green'))
+                else: lines[index[0]*self.M[1]+index[1]].setStyleSheet(self.get_style('red'))
                 self.progressBar.setValue((index[0]*self.M[0]+index[1])/(self.M[0]*self.M[1])*100)
         self.set_property([self.start, self.loadto, 'enable'])
         self.progressBar.setValue(100)
 
     @pyqtSlot()
     def on_start_clicked(self):
-        if self.start.text() == 'Анализ':
-            self.start.setEnabled(False)
+        if self.start.text() == 'Анализ' and len(self.oldtext.toPlainText()) != 0:
             self.phrase = self.oldtext.toPlainText()
             self.comboBox.clear()
             self.comboBox.setEnabled(True)
@@ -126,9 +110,11 @@ class Window(QMainWindow):
             self.comboBox.addItems(a)
             if self.radioButton.isChecked() == True:
                 if a:
+                    self.comboBox.setEnabled(True)
                     self.set_property([self.generate, self.loadfrom, 'enable'])
                     if len(self.phrase)<3601: self.hand_mode.setEnabled(True)
                     self.start.setText('Преобразовать')
+                    self.start.setEnabled(False)
             else: self.set_property([self.hand_mode, self.loadfrom, 'enable'])
         elif self.start.text() == 'Преобразовать':
             if self.radioButton.isChecked() == True: self.newtext.setPlainText(self.crypting('encode',self.M, self.grid, self.oldtext.toPlainText()))
@@ -155,17 +141,29 @@ class Window(QMainWindow):
             self.gridLayout.removeWidget(item)
             item.deleteLater()
 
-    def createtable(self):
+    @pyqtSlot()
+    def on_hand_mode_clicked(self):
+        self.start.setEnabled(False)
+        t = self.comboBox.currentText().split('x')
+        self.M, self.pc = (int(t[1]),int(t[0])), 0
+        self.grid = self.genmatrix(self.M, self.grid, self.progressBar, nul = True)
+        self.createtable(True)
+        self.progressBar.setValue(0)
+
+    def createtable(self, clickable):
         self.clear_layout()
         w, h = int(329/self.M[0]), int(329/self.M[1])
         self.frame.setGeometry(QRect(451,221, (h+1)*self.M[1], (w+1)*self.M[0]))
         for index, item in np.ndenumerate(self.grid):
             button = QPushButton('', self)
             button.setFixedSize(h,w)
-            button.setEnabled(False)
-            button.setStyleSheet(self.get_style('red'))
-            button.objectName = str(index[0])+'_'+str(index[1])
-            button.clicked.connect(self.matrixclick)
+            if clickable:
+                button.objectName = str(index[0])+'_'+str(index[1])
+                button.clicked.connect(self.matrixclick)
+                button.setStyleSheet(self.get_style('hand'))
+                button.setEnabled(True)
+            else:
+                button.setEnabled(False)
             self.gridLayout.addWidget(button, index[0], index[1])
 
     def preinit(self):
@@ -186,7 +184,8 @@ class Window(QMainWindow):
         return ret
 
     def get_style(self, color):
-        switch = { 'hand': self.btn, 'red': "background-color: rgb(205, 1, 1);" "border: none;", 'green': "background-color: rgb(4, 119, 4);" "border: none;" }
+        #switch = { 'hand': self.btn, 'red': "background-color: rgb(205, 1, 1);" "border: none;", 'green': "background-color: rgb(4, 119, 4);" "border: none;" }
+        switch = { 'hand': self.btn, 'red': "background: url(images/red.png);" "border: none;", 'green': "background: url(images/green.png);" "border: none;" }
         return switch[color]
 
     def __init__(self, f, g):

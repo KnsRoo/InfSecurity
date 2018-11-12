@@ -1,13 +1,13 @@
 QPushButton {
-    background-color: white;
+    background-color: #3e3f43;
     border: none;
  }
  QPushButton:pressed {
-     background-color: rgb(205, 1, 1);     
+     background: url('images/green.png');     
  }
  QPushButton:hover {
-     background-color: rgb(37, 231, 234);
+     background-color: #1a1b1f;
  }
   QPushButton:disabled {
-     background-color: rgb(205, 1, 1);     
+     background: url('images/red.png');   
  }
